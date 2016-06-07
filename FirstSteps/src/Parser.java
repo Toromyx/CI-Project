@@ -82,7 +82,7 @@ public class Parser {
 				mlp.setTrainingTime(2000);
 				mlp.setHiddenLayers("3");
 				
-				//necessary, not sure why though
+				//necessary, determines number of features
 				parserCSV.data.setClassIndex(data.numAttributes() - 1);
 				
 				mlp.buildClassifier(parserCSV.data);
