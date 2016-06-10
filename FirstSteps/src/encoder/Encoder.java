@@ -1,5 +1,7 @@
 package encoder;
 
+import weka.core.Instances;
+
 /**
  * Parent class encoder, includes all necessary methods
  * @author Thomas
