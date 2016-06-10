@@ -1,5 +1,6 @@
 package encoder;
 
+import weka.core.Instance;
 import weka.core.Instances;
 
 /**
@@ -9,8 +10,19 @@ import weka.core.Instances;
  */
 public abstract class Encoder {
 	
+	static enum AminoAcid{A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y,X}
+	
 	/**
-	 * Encodes
+	 * Encodes the whole sequence of amino acids
 	 */
-	public abstract Instances encode(String p);
+	public Instances encodeAll(String p) {
+		// TODO stuff
+		
+		return null;
+	}
+	
+	/**
+	 * encodes a single amino acid
+	 */
+	public abstract Instances encodeSingle(AminoAcid aa);
 }

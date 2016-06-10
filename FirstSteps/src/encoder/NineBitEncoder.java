@@ -3,10 +3,8 @@ package encoder;
 import weka.core.Instances;
 
 public class NineBitEncoder extends Encoder{
-	
-	private static enum aminoAcid{A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y}
 
-	private static int AAToBit(aminoAcid a){
+	private static int AAToBit(AminoAcid a){
 		
 		switch(a){
 			case A:
@@ -54,16 +52,17 @@ public class NineBitEncoder extends Encoder{
 				return 111111111; //Amino acid X
 		}
 	}
-	@Override
-	public Instances encode(String p) {
-		return null;
+	
+	public static void main(String[]args){
+		AminoAcid x = AminoAcid.A;
+		System.out.println(AAToBit(x));
 		
 	}
 	
-	public static void main(String[]args){
-		aminoAcid x = aminoAcid.A;
-		System.out.println(AAToBit(x));
-		
+	@Override
+	public Instances encodeSingle(AminoAcid aa) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

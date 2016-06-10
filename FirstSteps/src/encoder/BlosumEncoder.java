@@ -39,12 +39,6 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 		this.blosumNum = findBlosumNum(bNum);
 	}
 
-	@Override
-	public Instances encode(String p) {
-		// TODO encode that shit
-		return null;
-	}
-
 	/**
 	 * from any number, returns the correct Blosum Matrix Number. If there isn't one, chooses the nearest number, prefers lower number.
 	 * @param n
@@ -107,5 +101,11 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 			System.err.println("No fitting Blosum matrix found. Choosing default value 50.");
 			return defaultBlosum;
 		}
+	}
+
+	@Override
+	public Instances encodeSingle(AminoAcid aa) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
