@@ -1,10 +1,10 @@
 package encoder;
 
-public class BlosumEncoder extends Encoder {
+public class BlosumEncoder extends Encoder implements BlosumInterface{
 
-	private static enum BlosumNum{b30, b35, b40, b45, b50, b55, b60, b62, b65, b70, b75, b80, b85, b90, b100}
-	private static int[] blosumNums = {30, 35, 40, 45, 50, 55, 60, 62, 65, 70, 75, 80, 85, 90, 100};
-	private static boolean[] blosumExists = new boolean[101];
+	protected static enum BlosumNum{b30, b35, b40, b45, b50, b55, b60, b62, b65, b70, b75, b80, b85, b90, b100}
+	protected static int[] blosumNums = {30, 35, 40, 45, 50, 55, 60, 62, 65, 70, 75, 80, 85, 90, 100};
+	protected static boolean[] blosumExists = new boolean[101];
 
 	static {
 		for (int i=0; i<blosumNums.length; i++){
@@ -12,13 +12,13 @@ public class BlosumEncoder extends Encoder {
 		}
 	}
 
-	private static BlosumNum defaultBlosum = BlosumNum.b50;
+	protected static BlosumNum defaultBlosum = BlosumNum.b50;
 	
 	//non-static stuff follows
-	private BlosumNum blosumNum = defaultBlosum;
+	private BlosumNum blosumNum;
 
 	public BlosumEncoder() {
-		// TODO add code for more class variables
+		this.blosumNum = defaultBlosum;
 	}
 
 	public BlosumEncoder(int bNum) {
@@ -38,8 +38,9 @@ public class BlosumEncoder extends Encoder {
 	}
 
 	@Override
-	public void encode(String p) {
+	public int[][] encode(String p) {
 		// TODO encode that shit
+		return null;
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class BlosumEncoder extends Encoder {
 	 * @param n
 	 * @return
 	 */
-	private BlosumNum findBlosumNum(int n) {
+	protected static BlosumNum findBlosumNum(int n) {
 		if(blosumExists[n]) {
 			return intToBlosumNum(n);
 		} else {
@@ -68,7 +69,7 @@ public class BlosumEncoder extends Encoder {
 	 * @param n
 	 * @return
 	 */
-	private BlosumNum intToBlosumNum(int n) {
+	protected static BlosumNum intToBlosumNum(int n) {
 		switch(n){
 		case(30):
 			return BlosumNum.b30;
