@@ -1,5 +1,7 @@
 package encoder;
 
+import weka.core.Instances;
+
 public class BlosumEncoder extends Encoder implements BlosumInterface{
 
 	protected static enum BlosumNum{b30, b35, b40, b45, b50, b55, b60, b62, b65, b70, b75, b80, b85, b90, b100}
@@ -38,7 +40,7 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 	}
 
 	@Override
-	public int[][] encode(String p) {
+	public Instances encode(String p) {
 		// TODO encode that shit
 		return null;
 	}

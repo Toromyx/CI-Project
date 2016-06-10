@@ -10,5 +10,5 @@ public abstract class Encoder {
 	/**
 	 * Encodes
 	 */
-	public abstract int[][] encode(String p);
+	public abstract Instances encode(String p);
 }
