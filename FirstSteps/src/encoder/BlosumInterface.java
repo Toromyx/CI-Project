@@ -1,5 +1,6 @@
 package encoder;
 
+import encoder.AAInterface.AminoAcid;
 import encoder.BlosumEncoder.*;
 
 public interface BlosumInterface {
@@ -434,20 +435,57 @@ public interface BlosumInterface {
 	 * @return the (log) likelihood of the amino acids being swapped in multiple sequence alignments of proteins with bNum% similarity.
 	 */
 	public static int getValue(int bNum, char a1, char a2) {
-		return getValue(BlosumEncoder.findBlosumNum(bNum), a1, a2);
-	}
-	
-	public static int getValue(BlosumNum bNum, char a1, char a2) {
-		int[][] matrix = getMatrix(bNum);
-		return matrix[a1][a2];
+		// TODO
+		return 0;
 	}
 
-	public static int[][] getMatrix(int bNum) {
-		return getMatrix(BlosumEncoder.findBlosumNum(bNum));
+	/**
+	 * returns the row of the corresponding amino acid
+	 * @param aa Amino Acid
+	 * @return the values of the row/column for that Amino Acid
+	 */
+	public static int[] getRow(AminoAcid aa, BlosumNum bNum) {
+		return getMatrix(bNum)[aaToIndex(aa)];
 	}
 
 	public static int[][] getMatrix(BlosumNum bNum) {
-		// TODO
-		return null;
+		switch(bNum) {
+		case b30:
+			return b30Matrix;
+		case b35:
+			return b35Matrix;
+		case b40:
+			return b40Matrix;
+		case b45:
+			return b45Matrix;
+		case b50:
+			return b50Matrix;
+		case b55:
+			return b55Matrix;
+		case b60:
+			return b60Matrix;
+		case b62:
+			return b62Matrix;
+		case b65:
+			return b65Matrix;
+		case b70:
+			return b70Matrix;
+		case b75:
+			return b75Matrix;
+		case b80:
+			return b80Matrix;
+		case b85:
+			return b85Matrix;
+		case b90:
+			return b90Matrix;
+		case b100:
+			return b100Matrix;
+		default:
+			return b50Matrix;
+		}
+	}
+	
+	public static int aaToIndex(AminoAcid aa) {
+		return AAOrder.toString().indexOf(AAInterface.aaToChar(aa));
 	}
 }

@@ -60,7 +60,7 @@ public class NineBitEncoder extends Encoder{
 	}
 	
 	@Override
-	public Instances encodeSingle(AminoAcid aa) {
+	public int[] encodeSingle(AminoAcid aa) {
 		// TODO Auto-generated method stub
 		return null;
 	}

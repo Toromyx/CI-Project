@@ -104,8 +104,7 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 	}
 
 	@Override
-	public Instances encodeSingle(AminoAcid aa) {
-		// TODO Auto-generated method stub
-		return null;
+	public int[] encodeSingle(AminoAcid aa) {
+		return BlosumInterface.getRow(aa, blosumNum);
 	}
 }
