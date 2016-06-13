@@ -1,4 +1,4 @@
-package encoder;
+package src.encoder;
 
 import weka.core.Instances;
 
