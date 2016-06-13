@@ -1,7 +1,4 @@
 package src.encoder;
-
-import java.io.File;
-import java.io.IOException;
 /**
  * @author Friederike
  */
@@ -11,7 +8,6 @@ import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.converters.CSVSaver;
 
 public class SixBitEncoder extends Encoder {
 
@@ -31,14 +27,6 @@ public class SixBitEncoder extends Encoder {
 		for (int i = 0; i < p.length(); i++) {
 			dataset.add(encodeSingle(seq[i]));
 		}
-
-		
-		 CSVSaver saver = new CSVSaver(); try { saver.setFile(new
-		 File("encoding.txt")); saver.setInstances(dataset);
-		 saver.setFieldSeparator("\t"); saver.writeBatch(); } catch
-		(IOException e) { // TODO Auto-generated catch block
-		 e.printStackTrace(); }
-		
 
 		return dataset;
 	}
@@ -141,48 +129,15 @@ public class SixBitEncoder extends Encoder {
 		result.setValue(3, attValues[3]);
 		result.setValue(4, attValues[4]);
 		result.setValue(5, attValues[5]);
-		System.out.println("result " + result);
+		
 		return result;
 	}
 
+	/*
 	public static void main(String[] args) {
 
 		SixBitEncoder test = new SixBitEncoder();
 		test.encodeAll("ATYMAA");
-		/*
-		 * AminoAcid a = AminoAcid.A; AminoAcid c = AminoAcid.C; AminoAcid d =
-		 * AminoAcid.D; AminoAcid e = AminoAcid.E; AminoAcid f = AminoAcid.F;
-		 * AminoAcid g = AminoAcid.G; AminoAcid h = AminoAcid.H; AminoAcid i =
-		 * AminoAcid.I; AminoAcid k = AminoAcid.K; AminoAcid l = AminoAcid.L;
-		 * AminoAcid m = AminoAcid.M; AminoAcid n = AminoAcid.N; AminoAcid p =
-		 * AminoAcid.P; AminoAcid q = AminoAcid.Q; AminoAcid r = AminoAcid.R;
-		 * AminoAcid s = AminoAcid.S; AminoAcid t = AminoAcid.T; AminoAcid v =
-		 * AminoAcid.V; AminoAcid w = AminoAcid.W; AminoAcid y = AminoAcid.Y;
-		 * AminoAcid x = AminoAcid.X;
-		 * 
-		 * 
-		 * System.out.println(test.encodeSingle(a));
-		 * System.out.println(test.encodeSingle(c));
-		 * System.out.println(test.encodeSingle(d));
-		 * System.out.println(test.encodeSingle(e));
-		 * System.out.println(test.encodeSingle(f));
-		 * System.out.println(test.encodeSingle(g));
-		 * System.out.println(test.encodeSingle(h));
-		 * System.out.println(test.encodeSingle(i));
-		 * System.out.println(test.encodeSingle(k));
-		 * System.out.println(test.encodeSingle(l));
-		 * System.out.println(test.encodeSingle(m));
-		 * System.out.println(test.encodeSingle(n));
-		 * System.out.println(test.encodeSingle(p));
-		 * System.out.println(test.encodeSingle(q));
-		 * System.out.println(test.encodeSingle(r));
-		 * System.out.println(test.encodeSingle(s));
-		 * System.out.println(test.encodeSingle(t));
-		 * System.out.println(test.encodeSingle(v));
-		 * System.out.println(test.encodeSingle(w));
-		 * System.out.println(test.encodeSingle(y));
-		 * System.out.println(test.encodeSingle(x));
-		 * System.out.println(test.encodeSingle(a));
-		 */
-	}
+		
+	}*/
 }
