@@ -14,7 +14,7 @@ public abstract class Encoder implements AAInterface{
 	/**
 	 * Encodes the whole sequence of amino acids
 	 */
-	public Instances encodeAll(Instances p) {
+	public Instances encodeAll(String p) {
 		// TODO stuff
 		return null;
 	}
@@ -22,5 +22,5 @@ public abstract class Encoder implements AAInterface{
 	/**
 	 * encodes a single amino acid
 	 */
-	public abstract int[] encodeSingle(AminoAcid aa);
+	//public abstract int[] encodeSingle(AminoAcid aa);
 }
