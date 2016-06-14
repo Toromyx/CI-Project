@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-import scr.encoder.NineBitEncoder;
+import src.encoder.NineBitEncoder;
 import src.encoder.BlosumEncoder;
 import src.encoder.SixBitEncoder;
 import weka.core.Instances;
