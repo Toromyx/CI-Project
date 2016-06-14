@@ -31,7 +31,7 @@ public class SixBitEncoder extends Encoder {
 		return dataset;
 	}
 
-	public Instance encodeSingle(AminoAcid aa) {
+	private Instance encodeSingle(AminoAcid aa) {
 
 		char[] attValues = new char[6];
 		Instance result = new DenseInstance(6);

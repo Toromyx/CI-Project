@@ -44,8 +44,14 @@ public class NineBitEncoder extends Encoder {
 
 		return dataset;
 	}
-
-	public Instance encodeSingle(AminoAcid aa) {
+	
+	
+	/**
+	 * Source: https://books.google.de/books?id=JbBsPibqtIsC&pg=PA27&lpg=PA27&dq=amino+acid+representation+in+ann&source=bl&ots=IedGSv-5bk&sig=jCBvzz8RBdBBdWNNImoGKwDR3uw&hl=en&sa=X&ved=0ahUKEwjh7cPj25XNAhUFnRoKHWW3APUQ6AEIHDAA#v=onepage&q&f=false
+	 * @param aa
+	 * @return
+	 */
+	private Instance encodeSingle(AminoAcid aa) {
 
 		int[] attValues = new int[9];
 		Instance result = new DenseInstance(9);
