@@ -22,7 +22,11 @@ public class Parser {
 		
 	}
 
-	private Instances loadCSV(String filename) throws IOException {
+	public static Instances getData() {
+		return data;
+	}
+
+	public Instances loadCSV(String filename) throws IOException {
 		// CSV loader can also load tab separated data if specified
 		CSVLoader loader = new CSVLoader();
 		loader.setFieldSeparator("\t");
@@ -61,41 +65,5 @@ public class Parser {
 
 	}
 
-	public static void main(String[] args) throws IOException {
-		Parser parserCSV = null;
-		
-		// maybe read in more then one file?
-		if (args.length < 1) {
-			System.err.println("You should specify at least one file as input!");
-			System.exit(1);
-		} else {
 
-			parserCSV = new Parser();
-			parserCSV.loadCSV(args[0]);
-			//required output
-			parserCSV.createCSV("output.txt");
-						
-			try {
-				MultilayerPerceptron mlp = new MultilayerPerceptron();
-				System.out.println("Mlp initialized");
-				// Setting Parameters
-				mlp.setLearningRate(0.1);
-				mlp.setMomentum(0.2);
-				mlp.setTrainingTime(2000);
-				mlp.setHiddenLayers("3");
-				
-				//necessary, determines number of features
-				parserCSV.data.setClassIndex(data.numAttributes() - 1);
-				
-				mlp.buildClassifier(parserCSV.data);
-				System.out.println("Classifier built");
-				
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-
-		}
-		
-		
-	}
 }

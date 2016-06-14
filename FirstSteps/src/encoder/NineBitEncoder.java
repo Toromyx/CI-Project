@@ -13,7 +13,8 @@ import weka.core.Instances;
 import weka.core.converters.CSVSaver;
 
 public class NineBitEncoder extends Encoder {
-
+	
+	
 	public Instances encodeAll(String p) {
 
 		ArrayList<Attribute> x = new ArrayList();
@@ -48,8 +49,8 @@ public class NineBitEncoder extends Encoder {
 	
 	/**
 	 * Source: https://books.google.de/books?id=JbBsPibqtIsC&pg=PA27&lpg=PA27&dq=amino+acid+representation+in+ann&source=bl&ots=IedGSv-5bk&sig=jCBvzz8RBdBBdWNNImoGKwDR3uw&hl=en&sa=X&ved=0ahUKEwjh7cPj25XNAhUFnRoKHWW3APUQ6AEIHDAA#v=onepage&q&f=false
-	 * @param aa
-	 * @return
+	 * @param Current amino acid that needs to be encoded
+	 * @return Encoding as instance
 	 */
 	private Instance encodeSingle(AminoAcid aa) {
 
