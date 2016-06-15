@@ -12,9 +12,14 @@ import weka.core.Instances;
 public abstract class Encoder implements AAInterface{
 	
 	/**
-	 * Encodes the whole sequence of amino acids
+	 * Encodes the whole set of sequences of amino acids
 	 */
-	public Instances encodeAll(String p) {
+	public Instances encodeAll(Instances s) {
+		// TODO stuff
+		return null;
+	}
+	
+	public Instance encodePeptide(Instance p) {
 		// TODO stuff
 		return null;
 	}
@@ -22,5 +27,5 @@ public abstract class Encoder implements AAInterface{
 	/**
 	 * encodes a single amino acid
 	 */
-	//public abstract int[] encodeSingle(AminoAcid aa);
+	public abstract int[] encodeSingle(AminoAcid aa);
 }

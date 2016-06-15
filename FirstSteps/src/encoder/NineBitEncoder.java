@@ -15,36 +15,36 @@ import weka.core.converters.CSVSaver;
 public class NineBitEncoder extends Encoder {
 	
 	
-	public Instances encodeAll(String p) {
-
-		ArrayList<Attribute> x = new ArrayList();
-		AminoAcid[] seq = AAInterface.stringToAA(p);
-		x.add(new Attribute("first"));
-		x.add(new Attribute("second"));
-		x.add(new Attribute("third"));
-		x.add(new Attribute("fourth"));
-		x.add(new Attribute("fifth"));
-		x.add(new Attribute("sixth"));
-		x.add(new Attribute("seventh"));
-		x.add(new Attribute("eigth"));
-		x.add(new Attribute("ninth"));
-
-		Instances dataset = new Instances("Encoding", x, 9);
-
-		for (int i = 0; i < p.length(); i++) {
-			dataset.add(encodeSingle(seq[i]));
-		}
-
-		/*
-		 * CSVSaver saver = new CSVSaver(); try { saver.setFile(new
-		 * File("encoding.txt")); saver.setInstances(dataset);
-		 * saver.setFieldSeparator("\t"); saver.writeBatch(); } catch
-		 * (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
-		return dataset;
-	}
+//	public Instances encodeAll(String p) {
+//
+//		ArrayList<Attribute> x = new ArrayList();
+//		AminoAcid[] seq = AAInterface.stringToAA(p);
+//		x.add(new Attribute("first"));
+//		x.add(new Attribute("second"));
+//		x.add(new Attribute("third"));
+//		x.add(new Attribute("fourth"));
+//		x.add(new Attribute("fifth"));
+//		x.add(new Attribute("sixth"));
+//		x.add(new Attribute("seventh"));
+//		x.add(new Attribute("eigth"));
+//		x.add(new Attribute("ninth"));
+//
+//		Instances dataset = new Instances("Encoding", x, 9);
+//
+//		for (int i = 0; i < p.length(); i++) {
+//			dataset.add(encodeSingle(seq[i]));
+//		}
+//
+//		/*
+//		 * CSVSaver saver = new CSVSaver(); try { saver.setFile(new
+//		 * File("encoding.txt")); saver.setInstances(dataset);
+//		 * saver.setFieldSeparator("\t"); saver.writeBatch(); } catch
+//		 * (IOException e) { // TODO Auto-generated catch block
+//		 * e.printStackTrace(); }
+//		 */
+//
+//		return dataset;
+//	}
 	
 	
 	/**
@@ -52,10 +52,10 @@ public class NineBitEncoder extends Encoder {
 	 * @param Current amino acid that needs to be encoded
 	 * @return Encoding as instance
 	 */
-	private Instance encodeSingle(AminoAcid aa) {
+	@Override
+	public int[] encodeSingle(AminoAcid aa) {
 
 		int[] attValues = new int[9];
-		Instance result = new DenseInstance(9);
 
 		switch (aa) {
 		case A:
@@ -139,22 +139,13 @@ public class NineBitEncoder extends Encoder {
 			attValues = y;
 			break;
 		default:
-			System.err.println("Amino acid was not found. Default value was used.");
+			System.err.println("Amino acid was not found. Default values were used for encoding.");
 			int[] x = { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 			attValues = x;
 
 		}
-		result.setValue(0, attValues[0]);
-		result.setValue(1, attValues[1]);
-		result.setValue(2, attValues[2]);
-		result.setValue(3, attValues[3]);
-		result.setValue(4, attValues[4]);
-		result.setValue(5, attValues[5]);
-		result.setValue(6, attValues[6]);
-		result.setValue(7, attValues[7]);
-		result.setValue(8, attValues[8]);
 
-		return result;
+		return attValues;
 	}
 
 	/*
