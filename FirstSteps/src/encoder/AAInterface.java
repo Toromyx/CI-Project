@@ -1,4 +1,4 @@
-package src.encoder;
+package encoder;
 
 public interface AAInterface {
 

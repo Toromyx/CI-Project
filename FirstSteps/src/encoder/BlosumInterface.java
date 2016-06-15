@@ -1,7 +1,7 @@
-package src.encoder;
+package encoder;
 
-import src.encoder.AAInterface.AminoAcid;
-import src.encoder.BlosumEncoder.*;
+import encoder.AAInterface.AminoAcid;
+import encoder.BlosumEncoder.*;
 
 public interface BlosumInterface {
 

@@ -1,12 +1,11 @@
-package src;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-import src.encoder.NineBitEncoder;
-import src.encoder.BlosumEncoder;
-import src.encoder.SixBitEncoder;
+import encoder.NineBitEncoder;
+import encoder.BlosumEncoder;
+import encoder.SixBitEncoder;
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;
 
