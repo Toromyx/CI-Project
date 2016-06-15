@@ -20,19 +20,24 @@ import weka.core.Instances;
 public class IC50 extends NeuralNetwork {
 
 	private Instances testdata;
-	private SerializedClassifier ann ;
+	private MultilayerPerceptron ann ;
 
 	public IC50(){
 		
 	}
 	public IC50(Instances testdata) {
 		this.testdata = testdata;
-		this.ann.setModelFile(new File("IC50ann"));
+		try {
+			this.ann = (MultilayerPerceptron)weka.core.SerializationHelper.read("/IC50ann");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public Instances run() {
-		ann.classifyInstance(testdata);
+		
 		//TODO how to continue? Kilian?
 		return null;
 	}
@@ -56,7 +61,12 @@ public class IC50 extends NeuralNetwork {
 			e.printStackTrace();
 		}
 		
-		Debug.saveToFile("IC50ann.txt", ann);
+		try {
+			weka.core.SerializationHelper.write("IC50ann", ann);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
