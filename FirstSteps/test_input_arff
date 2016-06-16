@@ -1,0 +1,8 @@
+@relation TrainingData
+
+@attribute Peptide {LLLLVAPAY,SQEAEFTGY,KLEGKIVQY}
+
+@data
+LLLLVAPAY
+SQEAEFTGY
+KLEGKIVQY

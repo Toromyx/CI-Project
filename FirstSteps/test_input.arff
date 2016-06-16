@@ -1,0 +1,9 @@
+@relation TestData
+
+@attribute Peptide {LLLLVAPAY,SQEAEFTGY,KLEGKIVQY}
+@attribute label {0,1}
+
+@data
+LLLLVAPAY,?
+SQEAEFTGY,?
+KLEGKIVQY,?
