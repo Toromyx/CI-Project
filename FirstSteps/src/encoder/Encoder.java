@@ -1,5 +1,7 @@
 package encoder;
 
+import java.util.ArrayList;
+
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -21,6 +23,15 @@ public abstract class Encoder implements AAInterface{
 	
 	public Instance encodePeptide(Instance p) {
 		// TODO stuff
+		
+		ArrayList<Attribute> x = new ArrayList<Attribute>();
+		
+		for(int i=0; i<p.numAttributes(); i++) {
+			p.attribute(i);
+		}
+
+		//Instance encodedPeptide =  new Instances("Encoded Peptide", arg1, arg2)
+				
 		return null;
 	}
 	
