@@ -1,9 +1,13 @@
 package encoder;
 
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 
+import encoder.AAInterface.AminoAcid;
 import weka.core.Attribute;
+import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -13,43 +17,69 @@ import weka.core.Instances;
  *
  */
 public abstract class Encoder implements AAInterface{
+
+	public final int codeLength;
 	
-	/**
-	 * Encodes the whole set of sequences of amino acids
-	 */
+	
+	
+	public Encoder() {
+		this.codeLength = encodeSingle(AminoAcid.A).length;
+	}
+
 	public Instances encodeAll(Instances s) {
 		// TODO stuff
-		return null;
-	}
-	
-	public abstract ArrayList<Attribute> encodePeptide(String p); /* {
 		
-		int[][] encodedPeptide = new int[p.length()][];
-		
-		for (int i=0; i<p.length(); i++) {
-			char c = p.charAt(i);
-			AminoAcid aa = AAInterface.charToAA(c);
-			int[] aaCode = encodeSingle(aa);
-			encodedPeptide[i] = aaCode;
-		}
-		
-		ArrayList<Attribute> attributeList = new ArrayList<>();
-		
-		for (int i=0; i<encodedPeptide.length; i++) {
-			for (int j=0; j<encodedPeptide[i].length; j++) {
-				attributeList.add(new Attribute("aminoAcidAttr"));
+		ArrayList<Attribute> attrList = new ArrayList<Attribute>();
+
+		int peptideLength = s.get(0).attribute(0).value(0).length();
+
+		for (int i=1; i<=peptideLength; i++) {
+			for (int j=1; j<=codeLength; j++) {
+				attrList.add(new Attribute("AA"+i+"attr"+j, 0)); // 0 -> numeric
 			}
 		}
-        
-		return null;
-	}*/
-	
+
+		Instances outInst = new Instances("Encoded Dataset", attrList, s.size());
+		
+		for (Iterator<Instance> instIt = s.iterator(); instIt.hasNext(); instIt.next()) {
+			outInst.add(encodePeptide(instIt.toString()));
+		}
+
+		return outInst;
+	}
+
+	/**
+	 * encodes a single peptide from a String into a DenseInstance, which can be added to an Instances object
+	 * @param p the peptide to encode
+	 * @return the encoded peptide as a DenseInstance with numeric values
+	 */
+	public DenseInstance encodePeptide(String p) {
+
+		double[] attrValues = new double[p.length()*codeLength];
+		
+		for (int aa=0; aa<p.length(); aa++) {
+			int[] encodedAa = encodeSingle(AAInterface.charToAA(p.charAt(aa)));
+			for (int i=0; i<encodedAa.length; i++) {
+				attrValues[aa*codeLength+i] = (double)encodedAa[i];
+			}
+			
+		}
+
+		DenseInstance densInst =  new DenseInstance(1, attrValues);
+
+		return densInst;
+	}
+
 	/**
 	 * encodes a single amino acid
 	 */
 	public abstract int[] encodeSingle(AminoAcid aa);
-	
+
 	public static void main(String[] args) {
-		
+		NineBitEncoder nbe = new NineBitEncoder();
+
+		DenseInstance attrList = nbe.encodePeptide("SQEAEFTGY");
+
+		System.out.println(attrList);
 	}
 }

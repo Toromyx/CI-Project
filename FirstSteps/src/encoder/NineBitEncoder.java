@@ -15,38 +15,6 @@ import weka.core.converters.CSVSaver;
 public class NineBitEncoder extends Encoder {
 
 
-	public ArrayList<Attribute> encodePeptide(String p) {
-
-		ArrayList<Attribute> x = new ArrayList();
-		AminoAcid[] seq = AAInterface.stringToAA(p);
-		x.add(new Attribute("first"));
-		x.add(new Attribute("second"));
-		x.add(new Attribute("third"));
-		x.add(new Attribute("fourth"));
-		x.add(new Attribute("fifth"));
-		x.add(new Attribute("sixth"));
-		x.add(new Attribute("seventh"));
-		x.add(new Attribute("eigth"));
-		x.add(new Attribute("ninth"));
-
-		Instances dataset = new Instances("Encoding", x, 9);
-
-		for (int i = 0; i < p.length(); i++) {
-			dataset.add(encodeSingle(seq[i]));
-		}
-
-		/*
-		 * CSVSaver saver = new CSVSaver(); try { saver.setFile(new
-		 * File("encoding.txt")); saver.setInstances(dataset);
-		 * saver.setFieldSeparator("\t"); saver.writeBatch(); } catch
-		 * (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
-		return x;
-	}
-
-
 	/**
 	 * Source: https://books.google.de/books?id=JbBsPibqtIsC&pg=PA27&lpg=PA27&dq=amino+acid+representation+in+ann&source=bl&ots=IedGSv-5bk&sig=jCBvzz8RBdBBdWNNImoGKwDR3uw&hl=en&sa=X&ved=0ahUKEwjh7cPj25XNAhUFnRoKHWW3APUQ6AEIHDAA#v=onepage&q&f=false
 	 * @param Current amino acid that needs to be encoded

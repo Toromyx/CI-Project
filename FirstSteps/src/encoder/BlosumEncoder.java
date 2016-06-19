@@ -23,10 +23,12 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 	private BlosumNum blosumNum;
 
 	public BlosumEncoder() {
+		super();
 		this.blosumNum = defaultBlosum;
 	}
 
 	public BlosumEncoder(int bNum) {
+		super();
 		this.blosumNum = findBlosumNum(bNum);
 	}
 
@@ -109,11 +111,5 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 	@Override
 	public int[] encodeSingle(AminoAcid aa) {
 		return BlosumInterface.getRow(aa, blosumNum);
-	}
-
-	@Override
-	public ArrayList<Attribute> encodePeptide(String p) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
