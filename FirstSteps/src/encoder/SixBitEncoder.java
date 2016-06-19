@@ -126,6 +126,12 @@ public class SixBitEncoder extends Encoder {
 		return attValues;
 	}
 
+	@Override
+	public ArrayList<Attribute> encodePeptide(String p) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/*
 	public static void main(String[] args) {
 

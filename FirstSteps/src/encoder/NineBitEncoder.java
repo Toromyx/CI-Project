@@ -13,40 +13,40 @@ import weka.core.Instances;
 import weka.core.converters.CSVSaver;
 
 public class NineBitEncoder extends Encoder {
-	
-	
-//	public Instances encodeAll(String p) {
-//
-//		ArrayList<Attribute> x = new ArrayList();
-//		AminoAcid[] seq = AAInterface.stringToAA(p);
-//		x.add(new Attribute("first"));
-//		x.add(new Attribute("second"));
-//		x.add(new Attribute("third"));
-//		x.add(new Attribute("fourth"));
-//		x.add(new Attribute("fifth"));
-//		x.add(new Attribute("sixth"));
-//		x.add(new Attribute("seventh"));
-//		x.add(new Attribute("eigth"));
-//		x.add(new Attribute("ninth"));
-//
-//		Instances dataset = new Instances("Encoding", x, 9);
-//
-//		for (int i = 0; i < p.length(); i++) {
-//			dataset.add(encodeSingle(seq[i]));
-//		}
-//
-//		/*
-//		 * CSVSaver saver = new CSVSaver(); try { saver.setFile(new
-//		 * File("encoding.txt")); saver.setInstances(dataset);
-//		 * saver.setFieldSeparator("\t"); saver.writeBatch(); } catch
-//		 * (IOException e) { // TODO Auto-generated catch block
-//		 * e.printStackTrace(); }
-//		 */
-//
-//		return dataset;
-//	}
-	
-	
+
+
+	public ArrayList<Attribute> encodePeptide(String p) {
+
+		ArrayList<Attribute> x = new ArrayList();
+		AminoAcid[] seq = AAInterface.stringToAA(p);
+		x.add(new Attribute("first"));
+		x.add(new Attribute("second"));
+		x.add(new Attribute("third"));
+		x.add(new Attribute("fourth"));
+		x.add(new Attribute("fifth"));
+		x.add(new Attribute("sixth"));
+		x.add(new Attribute("seventh"));
+		x.add(new Attribute("eigth"));
+		x.add(new Attribute("ninth"));
+
+		Instances dataset = new Instances("Encoding", x, 9);
+
+		for (int i = 0; i < p.length(); i++) {
+			dataset.add(encodeSingle(seq[i]));
+		}
+
+		/*
+		 * CSVSaver saver = new CSVSaver(); try { saver.setFile(new
+		 * File("encoding.txt")); saver.setInstances(dataset);
+		 * saver.setFieldSeparator("\t"); saver.writeBatch(); } catch
+		 * (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+
+		return x;
+	}
+
+
 	/**
 	 * Source: https://books.google.de/books?id=JbBsPibqtIsC&pg=PA27&lpg=PA27&dq=amino+acid+representation+in+ann&source=bl&ots=IedGSv-5bk&sig=jCBvzz8RBdBBdWNNImoGKwDR3uw&hl=en&sa=X&ved=0ahUKEwjh7cPj25XNAhUFnRoKHWW3APUQ6AEIHDAA#v=onepage&q&f=false
 	 * @param Current amino acid that needs to be encoded
@@ -148,46 +148,59 @@ public class NineBitEncoder extends Encoder {
 		return attValues;
 	}
 
-	/*
-	 * public static void main(String[] args) {
-	 * 
-	 * NineBitEncoder test = new NineBitEncoder(); test.encodeAll("AAAAAAAAA");
-	 * 
-	 * AminoAcid a = AminoAcid.A; AminoAcid c = AminoAcid.C; AminoAcid d =
-	 * AminoAcid.D; AminoAcid e = AminoAcid.E; AminoAcid f = AminoAcid.F;
-	 * AminoAcid g = AminoAcid.G; AminoAcid h = AminoAcid.H; AminoAcid i =
-	 * AminoAcid.I; AminoAcid k = AminoAcid.K; AminoAcid l = AminoAcid.L;
-	 * AminoAcid m = AminoAcid.M; AminoAcid n = AminoAcid.N; AminoAcid p =
-	 * AminoAcid.P; AminoAcid q = AminoAcid.Q; AminoAcid r = AminoAcid.R;
-	 * AminoAcid s = AminoAcid.S; AminoAcid t = AminoAcid.T; AminoAcid v =
-	 * AminoAcid.V; AminoAcid w = AminoAcid.W; AminoAcid y = AminoAcid.Y;
-	 * AminoAcid x = AminoAcid.X;
-	 * 
-	 * 
-	 * System.out.println(test.encodeSingle(a));
-	 * System.out.println(test.encodeSingle(c));
-	 * System.out.println(test.encodeSingle(d));
-	 * System.out.println(test.encodeSingle(e));
-	 * System.out.println(test.encodeSingle(f));
-	 * System.out.println(test.encodeSingle(g));
-	 * System.out.println(test.encodeSingle(h));
-	 * System.out.println(test.encodeSingle(i));
-	 * System.out.println(test.encodeSingle(k));
-	 * System.out.println(test.encodeSingle(l));
-	 * System.out.println(test.encodeSingle(m));
-	 * System.out.println(test.encodeSingle(n));
-	 * System.out.println(test.encodeSingle(p));
-	 * System.out.println(test.encodeSingle(q));
-	 * System.out.println(test.encodeSingle(r));
-	 * System.out.println(test.encodeSingle(s));
-	 * System.out.println(test.encodeSingle(t));
-	 * System.out.println(test.encodeSingle(v));
-	 * System.out.println(test.encodeSingle(w));
-	 * System.out.println(test.encodeSingle(y));
-	 * System.out.println(test.encodeSingle(x));
-	 * System.out.println(test.encodeSingle(a));
-	 * 
-	 * 
-	 * }
-	 */
+
+	public static void main(String[] args) {
+
+		NineBitEncoder test = new NineBitEncoder();
+		System.out.println(test.encodePeptide("AAAAAAAAA"));
+
+		AminoAcid a = AminoAcid.A;
+		AminoAcid c = AminoAcid.C;
+		AminoAcid d = AminoAcid.D;
+		AminoAcid e = AminoAcid.E;
+		AminoAcid f = AminoAcid.F;
+		AminoAcid g = AminoAcid.G;
+		AminoAcid h = AminoAcid.H;
+		AminoAcid i = AminoAcid.I;
+		AminoAcid k = AminoAcid.K;
+		AminoAcid l = AminoAcid.L;
+		AminoAcid m = AminoAcid.M;
+		AminoAcid n = AminoAcid.N;
+		AminoAcid p = AminoAcid.P;
+		AminoAcid q = AminoAcid.Q;
+		AminoAcid r = AminoAcid.R;
+		AminoAcid s = AminoAcid.S;
+		AminoAcid t = AminoAcid.T;
+		AminoAcid v = AminoAcid.V;
+		AminoAcid w = AminoAcid.W;
+		AminoAcid y = AminoAcid.Y;
+		AminoAcid x = AminoAcid.X;
+
+
+		System.out.println(test.encodeSingle(a));
+		System.out.println(test.encodeSingle(c));
+		System.out.println(test.encodeSingle(d));
+		System.out.println(test.encodeSingle(e));
+		System.out.println(test.encodeSingle(f));
+		System.out.println(test.encodeSingle(g));
+		System.out.println(test.encodeSingle(h));
+		System.out.println(test.encodeSingle(i));
+		System.out.println(test.encodeSingle(k));
+		System.out.println(test.encodeSingle(l));
+		System.out.println(test.encodeSingle(m));
+		System.out.println(test.encodeSingle(n));
+		System.out.println(test.encodeSingle(p));
+		System.out.println(test.encodeSingle(q));
+		System.out.println(test.encodeSingle(r));
+		System.out.println(test.encodeSingle(s));
+		System.out.println(test.encodeSingle(t));
+		System.out.println(test.encodeSingle(v));
+		System.out.println(test.encodeSingle(w));
+		System.out.println(test.encodeSingle(y));
+		System.out.println(test.encodeSingle(x));
+		System.out.println(test.encodeSingle(a));
+
+
+	}
+
 }
