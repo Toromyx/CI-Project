@@ -1,61 +1,267 @@
 package defaultPackage;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
-import encoder.NineBitEncoder;
-import encoder.BlosumEncoder;
-import encoder.SixCharEncoder;
+import neuralNetworks.NeuralNetwork;
+import parser.EncodeParser;
 import weka.core.Instances;
-import weka.core.converters.CSVLoader;
 
 public class Main {
 
+	private static EncodeParser parser;
+	private static Instances predictData;
+
+	// Arguments are given in the following order: testdata, Encoding, ANN,
+	// output filename
 	public static void main(String[] args) throws IOException {
-		// load CSV
-	    Instances data = loadCSV("project_training.txt");
-	    data.setRelationName("TrainingData");
-	    
-	  //create an Encoder with user interface 
-	    System.out.println("Please choose the encouding type: ");
-	    System.out.println("press 1 for 9-bit-encoding ");
-	    System.out.println("press 2 for 6-bit-encoding ");
-	    System.out.println("press 3 for BLOSUM-encoding ");
-	    Scanner scanner = new Scanner(System.in);
-        String encodingType = scanner.nextLine();
-        
-        switch(encodingType){
-        case "1": 
-        	NineBitEncoder encoder1 = new NineBitEncoder();
-        	encoder1.encodeAll(data);
-        	break;
-        case "2": 
-        	SixCharEncoder encoder2 = new SixCharEncoder();
-        	encoder2.encodeAll(data);
-        	break;
-        case "3": 
-        	System.out.println("Please choose the Number of the Blosum Matrix");
-            String blosumType = scanner.nextLine();           
-        	BlosumEncoder encoder3 = new BlosumEncoder(Integer.parseInt(blosumType));
-        	encoder3.encodeAll(data);	
-        	break;
-        default:
-        	System.out.println("Invalid encoder type!");
-        	break;
-        }
-        scanner.close();
-        System.out.println();
-	    
-	    System.out.println(data.toSummaryString());
+		// testdata need to be read in
+		// encoded
+		// add '?' from arff maybe
+		// load proper ANN and execute it with the testdata
+		// write results to outputfilename
+		if (args[0].equals("help")) {
+			printHelp();
+		} else {
+			try {
+				//TODO???????
+				parser = new EncodeParser(){};
+				//process input
+				predictData = initializeData(args[0], args[1]);
+				
+				//generate ANN + write the return stuff to file,when know how parser works
+				applyANN(args[2],args[3],predictData);
+				
+			} catch (Exception e) {
+				System.err.println("Your input could not be processed.");
+			}
+		}
 	}
-	
-	private static Instances loadCSV(String file) throws IOException {
-		CSVLoader loader = new CSVLoader();
-	    loader.setFieldSeparator("\t");
-	    loader.setSource(new File(file));
-	    Instances data = loader.getDataSet();
-	  	return data;
+	// Instances predictData = parser.loadCSV(args[0]);
+
+	private static void printHelp() {
+		System.out.println("Please give the input in the following order: testdata encoding ann output-filename");
+		System.out.println(
+				"encoding: 6bit \n" + "	  9bit \n" + " 	  blosumX: X=[30,35,...,60,62,65,70,75,...,90,100]");
+		System.out.println("ann: IC50 \n" + "     Binary \n" + "     Combined");
 	}
 
+	private static Instances initializeData(String predictData, String encoding) throws IOException {
+			Instances data = parser.
+			
+			return data;
+	}
+	private static Instances applyANN(String encoding, String annVariable, Instances data) throws Exception{
+		String chosenAnn = chooseANN(encoding, annVariable);
+		NeuralNetwork ann = new NeuralNetwork(chosenAnn);
+		return ann.classifyData(data);
+	}
+	
+	private static String chooseANN(String encoding, String annName){
+		if(encoding.equals("6bit")){
+			if(annName.equals("IC50")){
+				return "6bitIC50";
+			}
+			if(annName.equals("Binary")){
+				return "6bitBinary";
+			}
+			if(annName.equals("Combined")){
+				return "6bitCombined";
+			}
+			
+		}
+		if(encoding.equals("9bit")){
+			if(annName.equals("IC50")){
+				return "9bitIC50";
+			}
+			if(annName.equals("Binary")){
+				return "9bitBinary";
+			}
+			if(annName.equals("Combined")){
+				return "9bitCombined";
+			}
+			
+		}
+		if(encoding.equals("blosum30")){
+			if(annName.equals("IC50")){
+				return "blosum30IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum30Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum30Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum35")){
+			if(annName.equals("IC50")){
+				return "blosum35IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum35Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum35Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum40")){
+			if(annName.equals("IC50")){
+				return "blosum40IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum40Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum40Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum45")){
+			if(annName.equals("IC50")){
+				return "blosum45IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum45Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum45Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum50")){
+			if(annName.equals("IC50")){
+				return "blosum50IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum50Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum50Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum55")){
+			if(annName.equals("IC50")){
+				return "blosum55IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum55Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum55Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum60")){
+			if(annName.equals("IC50")){
+				return "blosum60IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum60Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum60Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum62")){
+			if(annName.equals("IC50")){
+				return "blosum62IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum62Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum62Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum65")){
+			if(annName.equals("IC50")){
+				return "blosum65IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum65Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum65Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum70")){
+			if(annName.equals("IC50")){
+				return "blosum70IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum70Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum70Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum75")){
+			if(annName.equals("IC50")){
+				return "blosum75IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum75Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum75Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum80")){
+			if(annName.equals("IC50")){
+				return "blosum80IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum80Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum80Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum85")){
+			if(annName.equals("IC50")){
+				return "blosum85IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum85Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum85Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum90")){
+			if(annName.equals("IC50")){
+				return "blosum90IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum90Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum90Combined";
+			}
+			
+		}
+		if(encoding.equals("blosum100")){
+			if(annName.equals("IC50")){
+				return "blosum100IC50";
+			}
+			if(annName.equals("Binary")){
+				return "blosum100Binary";
+			}
+			if(annName.equals("Combined")){
+				return "blosum100Combined";
+			}
+			
+		}
+		
+		return null;
+	}
 }
