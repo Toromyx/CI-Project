@@ -8,6 +8,7 @@ import weka.core.Instances;
 
 public class Main {
 
+
 	private static EncodeParser parser;
 	private static Instances predictData;
 
@@ -35,6 +36,7 @@ public class Main {
 				System.err.println("Your input could not be processed.");
 			}
 		}
+
 	}
 	// Instances predictData = parser.loadCSV(args[0]);
 
