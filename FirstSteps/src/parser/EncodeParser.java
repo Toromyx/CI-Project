@@ -1,5 +1,6 @@
 package parser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ public interface EncodeParser {
 	 * @throws IOException 
 	 */
 	public static Instances readAndEncode(String sourcefile, Encoder enc) throws IOException {
+		// TODO truncate file
 		Instances data = loadCSV(sourcefile);		
 		return enc.encodeAll(data);	 // includes class labels (tarbet values)
 	}
@@ -43,11 +45,10 @@ public interface EncodeParser {
 		saver.setFile(new File(filename));
 		saver.setInstances(data);
 		saver.writeBatch();
-
 	}
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println(readAndEncode("project_training_binary.txt", new BlosumEncoder()));
+		System.out.println(readAndEncode("project_training_ic50.txt", new BlosumEncoder()));
 	}
 
 }
