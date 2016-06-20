@@ -17,10 +17,8 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 		}
 	}
 
-	protected static BlosumNum defaultBlosum = BlosumNum.b50;
-	
 	//non-static stuff follows
-	private BlosumNum blosumNum;
+	private BlosumNum blosumNum = defaultBlosum;
 
 	public BlosumEncoder() {
 		super();

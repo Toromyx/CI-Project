@@ -9,7 +9,7 @@ import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class SixBitEncoder extends Encoder {
+public class SixCharEncoder extends Encoder {
 
 //	public Instances encodeAll(String p) {
 //

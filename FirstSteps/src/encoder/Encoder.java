@@ -26,8 +26,12 @@ public abstract class Encoder implements AAInterface{
 		this.codeLength = encodeSingle(AminoAcid.A).length;
 	}
 
+	/**
+	 * includes class labels (target values)
+	 * @param s
+	 * @return
+	 */
 	public Instances encodeAll(Instances s) {
-		// TODO stuff
 		
 		ArrayList<Attribute> attrList = new ArrayList<Attribute>();
 
@@ -35,14 +39,19 @@ public abstract class Encoder implements AAInterface{
 
 		for (int i=1; i<=peptideLength; i++) {
 			for (int j=1; j<=codeLength; j++) {
-				attrList.add(new Attribute("AA"+i+"attr"+j, 0)); // 0 -> numeric
+				attrList.add(new Attribute("AA"+i+"attr"+j)); // numeric
 			}
 		}
+		attrList.add(new Attribute("targetValue"));
 
 		Instances outInst = new Instances("Encoded Dataset", attrList, s.size());
 		
-		for (Iterator<Instance> instIt = s.iterator(); instIt.hasNext(); instIt.next()) {
-			outInst.add(encodePeptide(instIt.toString()));
+		for (Iterator<Instance> instIt = s.iterator(); instIt.hasNext();) {
+			Instance currInstance = instIt.next();
+			DenseInstance instToAdd = encodePeptide(currInstance.stringValue(0));
+			double currTarget = currInstance.value(1);
+			instToAdd.setValue(peptideLength*codeLength, currTarget);
+			outInst.add(instToAdd);
 		}
 
 		return outInst;
@@ -55,7 +64,7 @@ public abstract class Encoder implements AAInterface{
 	 */
 	public DenseInstance encodePeptide(String p) {
 
-		double[] attrValues = new double[p.length()*codeLength];
+		double[] attrValues = new double[(p.length()*codeLength)+1]; // +1 for class label
 		
 		for (int aa=0; aa<p.length(); aa++) {
 			int[] encodedAa = encodeSingle(AAInterface.charToAA(p.charAt(aa)));
@@ -75,11 +84,11 @@ public abstract class Encoder implements AAInterface{
 	 */
 	public abstract int[] encodeSingle(AminoAcid aa);
 
-	public static void main(String[] args) {
-		NineBitEncoder nbe = new NineBitEncoder();
-
-		DenseInstance attrList = nbe.encodePeptide("SQEAEFTGY");
-
-		System.out.println(attrList);
-	}
+//	public static void main(String[] args) {
+//		NineBitEncoder nbe = new NineBitEncoder();
+//
+//		DenseInstance attrList = nbe.encodePeptide("SQEAEFTGY");
+//
+//		System.out.println(attrList);
+//	}
 }

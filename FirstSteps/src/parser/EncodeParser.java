@@ -1,17 +1,34 @@
 package parser;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
+import encoder.BlosumEncoder;
+import encoder.Encoder;
+import encoder.NineBitEncoder;
+import encoder.SixCharEncoder;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 
-public final class EncodeParser {
+public interface EncodeParser {
 
-	private EncodeParser() {}
+	/**
+	 * This method reads a file in the csv format given by the tutors and returns the data encoded inside an instance
+	 * which can be used on a neural network. This means the Instances include class labels.
+	 * @param sourcefile the filename of the sourcefile in the given format
+	 * @param enc the Encoder used to encode the data
+	 * @return the encoded data in form of an Instances object
+	 * @throws IOException 
+	 */
+	public static Instances readAndEncode(String sourcefile, Encoder enc) throws IOException {
+		Instances data = loadCSV(sourcefile);		
+		return enc.encodeAll(data);	 // includes class labels (tarbet values)
+	}
 	
 	public static Instances loadCSV(String filename) throws IOException {
-		// CSV loader can also load tab separated data if specified
 		CSVLoader loader = new CSVLoader();
 		loader.setFieldSeparator("\t");
 		loader.setNoHeaderRowPresent(false);
@@ -21,7 +38,7 @@ public final class EncodeParser {
 		return data;
 	}
 	
-	private static void createARFF(String filename, Instances data) throws IOException {
+	public static void createARFF(String filename, Instances data) throws IOException {
 		ArffSaver saver = new ArffSaver();
 		saver.setFile(new File(filename));
 		saver.setInstances(data);
@@ -30,9 +47,7 @@ public final class EncodeParser {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Instances data = loadCSV("project_training_binary.txt");
-		System.out.println(data.attribute(0).value(0));
-		createARFF("encode_text.arff", data);
+		System.out.println(readAndEncode("project_training_binary.txt", new BlosumEncoder()));
 	}
 
 }

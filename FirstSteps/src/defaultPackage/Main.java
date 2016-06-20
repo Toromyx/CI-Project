@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import encoder.NineBitEncoder;
 import encoder.BlosumEncoder;
-import encoder.SixBitEncoder;
+import encoder.SixCharEncoder;
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;
 
@@ -31,7 +31,7 @@ public class Main {
         	encoder1.encodeAll(data);
         	break;
         case "2": 
-        	SixBitEncoder encoder2 = new SixBitEncoder();
+        	SixCharEncoder encoder2 = new SixCharEncoder();
         	encoder2.encodeAll(data);
         	break;
         case "3": 

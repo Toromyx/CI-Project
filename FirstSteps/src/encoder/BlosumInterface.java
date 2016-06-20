@@ -427,17 +427,7 @@ public interface BlosumInterface {
 				{-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10,  1},
 		};
 
-	/**
-	 * 
-	 * @param bNum number of the Blosum matrix (e.g. 50, 62)
-	 * @param a1 first amino acid
-	 * @param a2 second amino acid
-	 * @return the (log) likelihood of the amino acids being swapped in multiple sequence alignments of proteins with bNum% similarity.
-	 */
-	public static int getValue(int bNum, char a1, char a2) {
-		// TODO
-		return 0;
-	}
+	public static final BlosumNum defaultBlosum = BlosumNum.b50;
 
 	/**
 	 * returns the row of the corresponding amino acid
@@ -445,7 +435,11 @@ public interface BlosumInterface {
 	 * @return the values of the row/column for that Amino Acid
 	 */
 	public static int[] getRow(AminoAcid aa, BlosumNum bNum) {
-		return getMatrix(bNum)[aaToIndex(aa)];
+		if(bNum == null) {
+			return getMatrix(defaultBlosum)[aaToIndex(aa)];
+		} else {
+			return getMatrix(bNum)[aaToIndex(aa)];
+		}
 	}
 
 	public static int[][] getMatrix(BlosumNum bNum) {
@@ -484,8 +478,13 @@ public interface BlosumInterface {
 			return b50Matrix;
 		}
 	}
-	
+
 	public static int aaToIndex(AminoAcid aa) {
-		return AAOrder.toString().indexOf(AAInterface.aaToChar(aa));
+		int index = new String(AAOrder).indexOf(AAInterface.aaToChar(aa));
+		if(index < 0 || index > 23) {
+			return 23;
+		} else {
+			return index;
+		}
 	}
 }
