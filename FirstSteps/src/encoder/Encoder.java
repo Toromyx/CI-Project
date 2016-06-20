@@ -53,6 +53,8 @@ public abstract class Encoder implements AAInterface{
 			instToAdd.setValue(peptideLength*codeLength, currTarget);
 			outInst.add(instToAdd);
 		}
+		
+		outInst.setClassIndex(outInst.numAttributes()-1);
 
 		return outInst;
 	}

@@ -24,31 +24,37 @@ public interface EncodeParser {
 	 * @return the encoded data in form of an Instances object
 	 * @throws IOException 
 	 */
-	public static Instances readAndEncode(String sourcefile, Encoder enc) throws IOException {
+	public static Instances readAndEncode(String sourcefile, boolean trainingValueIsClassIndex, Encoder enc) throws IOException {
 		// TODO truncate file
-		Instances data = loadCSV(sourcefile);		
+		Instances data = readTrainingCSV(sourcefile, trainingValueIsClassIndex);		
 		return enc.encodeAll(data);	 // includes class labels (tarbet values)
 	}
 	
-	public static Instances loadCSV(String filename) throws IOException {
+	/**
+	 * reads the txt given by the tutors and decides if to use the class index or ic50 value for training
+	 * @param filename the location an filename of the training data in form  a txt
+	 * @param trainingValueColIndex true = the binary class index should be used for training, false = the numeric ic50 value should be used
+	 * @return the data in form of an instances object with the class index (training value) as last attribute
+	 * @throws IOException
+	 */
+	public static Instances readTrainingCSV(String filename, boolean trainingValueIsClassIndex) throws IOException {
 		CSVLoader loader = new CSVLoader();
 		loader.setFieldSeparator("\t");
 		loader.setNoHeaderRowPresent(false);
 		loader.setSource(new File(filename));
 		Instances data = loader.getDataSet();
+		if(trainingValueIsClassIndex) {
+			data.deleteAttributeAt(1);
+		} else {
+			data.deleteAttributeAt(2);
+		}
 		data.setRelationName("TrainingData");
+		data.setClassIndex(data.numAttributes() - 1);
 		return data;
 	}
 	
-	public static void createARFF(String filename, Instances data) throws IOException {
-		ArffSaver saver = new ArffSaver();
-		saver.setFile(new File(filename));
-		saver.setInstances(data);
-		saver.writeBatch();
-	}
-	
 	public static void main(String[] args) throws IOException {
-		System.out.println(readAndEncode("project_training_ic50.txt", new BlosumEncoder()));
+		System.out.println(readAndEncode("output.txt", true, new BlosumEncoder()));
 	}
 
 }
