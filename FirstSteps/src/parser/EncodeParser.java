@@ -14,6 +14,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
+import weka.core.converters.CSVSaver;
 
 public interface EncodeParser {
 
@@ -88,9 +89,32 @@ public interface EncodeParser {
 		return data;	
 	}
 	
+	/**
+	 * writes the output of an ANN (being an instances object) into the format given by the tutors.
+	 * Needs the original input (same format) because there is no decoding
+	 * @param outputfile the location and filename to write the output file to
+	 * @param inputfile the location and filename to read the original sequences from, needs to have same length!
+	 * @param output the output of the ANN
+	 * @throws IOException
+	 */
+	public static void writeOutput(String outputfile, String inputfile, Instances output) throws IOException {
+		CSVSaver saver = new CSVSaver();
+		saver.setFile(new File(outputfile));
+		
+		Instances inputInst = readInputCSV(inputfile);
+		
+		Instances mergedInst = new Instances(inputInst, 0, inputInst.size());
+		for(int currInst=0; currInst<mergedInst.size(); currInst++) {
+			mergedInst.instance(currInst).setClassValue(output.instance(currInst).classValue());
+		}
+		
+		saver.setInstances(mergedInst);
+		saver.setFieldSeparator("\t");
+		saver.writeBatch();
+	}
+	
 	public static void main(String[] args) throws IOException {
-		System.out.println(readTrainingAndEncode("output.txt", true, new BlosumEncoder()));
-		System.out.println(readInputAndEncode("test_input.txt", new BlosumEncoder()));
+		
 	}
 
 }
