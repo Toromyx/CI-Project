@@ -1,5 +1,8 @@
 package neuralNetworks;
 
+/**
+ * @Friederike
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -12,10 +15,15 @@ import java.io.IOException;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 
+//TODO: generate all the different ANNs and store them
 public class NeuralNetwork {
 
 	private MultilayerPerceptron ann;
 
+	/**
+	 * SHOULD NOT BE USED BY ANY OTHER CLASS. 
+	 * The default constructor is needed to pre-generate all ANNs
+	 */
 	public NeuralNetwork() {
 
 	}
@@ -25,7 +33,7 @@ public class NeuralNetwork {
 	 * your data with a given model are then provided.
 	 * 
 	 * @param filename
-	 *            Proper filename such as Ic509bitAnn etc
+	 *            Proper filename such as 9bitIC50 etc
 	 * @throws Exception
 	 *             something went wrong with reading in the file
 	 */
@@ -55,6 +63,13 @@ public class NeuralNetwork {
 		return output;
 	}
 
+	
+	
+	/**
+	 * SHOULD NOT BE USED, UNLESS NEW ANNs ARE GENERATED
+	 * @param trainingsdata
+	 * @param filename
+	 */
 	private void generateANN(Instances trainingsdata, String filename) {
 
 		MultilayerPerceptron ann = new MultilayerPerceptron();
@@ -82,6 +97,10 @@ public class NeuralNetwork {
 		}
 	}
 
+	/**
+	 * Needed to separately generate ANNs. 
+	 */
+	/*
 	public static void main(String[] args) throws IOException {
 
 		// NeuralNetwork generator = new NeuralNetwork();
@@ -111,5 +130,5 @@ public class NeuralNetwork {
 		 
 
 	}
-
+	*/
 }

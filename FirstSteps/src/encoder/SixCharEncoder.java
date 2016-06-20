@@ -2,12 +2,6 @@ package encoder;
 /**
  * @author Friederike
  */
-import java.util.ArrayList;
-
-import weka.core.Attribute;
-import weka.core.DenseInstance;
-import weka.core.Instance;
-import weka.core.Instances;
 
 public class SixCharEncoder extends Encoder {
 
