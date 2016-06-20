@@ -48,7 +48,7 @@ public abstract class Encoder implements AAInterface{
 		
 		for (Iterator<Instance> instIt = s.iterator(); instIt.hasNext();) {
 			Instance currInstance = instIt.next();
-			DenseInstance instToAdd = encodePeptide(currInstance.stringValue(0));
+			DenseInstance instToAdd = encodePeptide(currInstance.stringValue(0)); // encoding takes place here
 			double currTarget = currInstance.value(1);
 			instToAdd.setValue(peptideLength*codeLength, currTarget);
 			outInst.add(instToAdd);
