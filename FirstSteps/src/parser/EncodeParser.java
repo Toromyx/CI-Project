@@ -112,5 +112,19 @@ public interface EncodeParser {
 		saver.setFieldSeparator("\t");
 		saver.writeBatch();
 	}
+	
+	public static void writeOutputThreshold(String outputfile, String inputfile, Instances output, double threshold, boolean aboveIsOne) throws IOException {
+		Instances newInst = new Instances(output);
+		
+		for(int currInst=0; currInst<newInst.size(); currInst++) {
+			if(newInst.instance(currInst).classValue() >= threshold) {
+				newInst.instance(currInst).setClassValue(aboveIsOne?1:0);
+			} else {
+				newInst.instance(currInst).setClassValue(aboveIsOne?0:1);
+			}
+		}
+		
+		writeOutput(outputfile, inputfile, newInst);
+	}
 
 }
