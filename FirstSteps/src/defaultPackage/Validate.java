@@ -16,10 +16,10 @@ public class Validate {
 
 	}
 	
-	private static void validate(Instances encodedData) throws Exception {
+	private static void validate(MultilayerPerceptron ann, Instances encodedData) throws Exception {
 		// to make Filters work (because of the "Cannot handle numeric
 		// class!"-Exception)
-		NumericToNominal NtoN = new NumericToNominal();
+		/*NumericToNominal NtoN = new NumericToNominal();
 		NtoN.setInputFormat(encodedData);
 		encodedData = Filter.useFilter(encodedData, NtoN);
 
@@ -37,7 +37,7 @@ public class Validate {
 		Instances crossV = Filter.useFilter(encodedData, res);
 
 		// create ann with train
-		MultilayerPerceptron ann = new MultilayerPerceptron();
+		/*MultilayerPerceptron ann = new MultilayerPerceptron();
 		ann.setLearningRate(0.1);
 		ann.setMomentum(0.9);
 		ann.setTrainingTime(10); // sonst dauert ewig
@@ -47,21 +47,24 @@ public class Validate {
 		System.out.println();
 		System.out.println("ANN is created");
 		System.out.println();
-		// System.out.println(ann.toString());
+		// System.out.println(ann.toString());*/
 
 		System.out.println("Cross-Validatoin Output:");
 		// create Evaluation for Cross-Validation
-		Evaluation CV = new Evaluation(crossV);
+		Evaluation CV = new Evaluation(encodedData);
 		Random rand = new Random(1);
-		CV.crossValidateModel(ann, crossV, 10, rand);
+		CV.crossValidateModel(ann, encodedData, 10, rand);
 		System.out.println(CV.toSummaryString());
 
+	}
+	
+	public static void testANN(MultilayerPerceptron ann, Instances test) throws Exception{
 		// create Evaluation (now for train-set, just to make sure it works)
-		Evaluation eval = new Evaluation(train);
+		Evaluation eval = new Evaluation(test);
 		System.out.println();
-		eval.evaluateModel(ann, train);
-		System.out.println("Evaluation results (now for train-set, just to make sure it works):");
-		System.out.println(eval.toSummaryString());
+		eval.evaluateModel(ann, test);
+		System.out.println("Evaluation results:");
+		System.out.println(eval.toSummaryString());	
 	}
 
 }
