@@ -112,9 +112,5 @@ public interface EncodeParser {
 		saver.setFieldSeparator("\t");
 		saver.writeBatch();
 	}
-	
-	public static void main(String[] args) throws IOException {
-		
-	}
 
 }
