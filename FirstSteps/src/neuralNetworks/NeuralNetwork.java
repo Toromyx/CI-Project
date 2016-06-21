@@ -1,21 +1,33 @@
 package neuralNetworks;
 
+/**
+ * @Friederike
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import encoder.BlosumEncoder;
+import encoder.Encoder;
+import encoder.SixCharEncoder;
+import parser.EncodeParser;
 /**
  * @author Friederike
  */
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 
-public class NeuralNetwork {
+//TODO: generate all the different ANNs and store them
+public class NeuralNetwork implements EncodeParser{
 
 	private MultilayerPerceptron ann;
 
+	/**
+	 * SHOULD NOT BE USED BY ANY OTHER CLASS. 
+	 * The default constructor is needed to pre-generate all ANNs
+	 */
 	public NeuralNetwork() {
 
 	}
@@ -25,7 +37,7 @@ public class NeuralNetwork {
 	 * your data with a given model are then provided.
 	 * 
 	 * @param filename
-	 *            Proper filename such as Ic509bitAnn etc
+	 *            Proper filename such as 9bitIC50 etc
 	 * @throws Exception
 	 *             something went wrong with reading in the file
 	 */
@@ -55,12 +67,19 @@ public class NeuralNetwork {
 		return output;
 	}
 
+	
+	
+	/**
+	 * SHOULD NOT BE USED, UNLESS NEW ANNs ARE GENERATED
+	 * @param trainingsdata
+	 * @param filename
+	 */
 	private void generateANN(Instances trainingsdata, String filename) {
 
 		MultilayerPerceptron ann = new MultilayerPerceptron();
 		ann.setLearningRate(0.1);
 		ann.setMomentum(0.2);
-		ann.setTrainingTime(2000);
+		ann.setTrainingTime(100);
 		ann.setHiddenLayers("80,1"); // sets number nodes in the hidden layer: 2
 										// hidden layers one with 80 one with 1
 										// -> output layer
@@ -82,34 +101,18 @@ public class NeuralNetwork {
 		}
 	}
 
+	
+	/**
+	 * Needed to separately generate ANNs. 
+	 */
+	/*
 	public static void main(String[] args) throws IOException {
 
-		// NeuralNetwork generator = new NeuralNetwork();
-		// Parser loader = new Parser();
-
-		// generator.generateANN(loader.loadCSV(args[0]), "IC50ann");
-		// generator.generateANN(loader.loadCSV(args[1]), "BinaryAnn");
-		// generator.generateANN(loader.loadCSV(args[2]), "CombinedAnn");
-
-		Instances datapredict = new Instances(new BufferedReader(new FileReader("test_input.arff")));
-		datapredict.setClassIndex(datapredict.numAttributes()-1);
-		Instances predicteddata = new Instances(datapredict);
-
-		System.out.println(datapredict);
-		
-		try {
-			NeuralNetwork test = new NeuralNetwork("IC50ann"); // Instances
-			predicteddata = test.classifyData(datapredict);
-			BufferedWriter writer = new BufferedWriter(	new FileWriter("output.arff"));
-					writer.write(predicteddata.toString());
-					writer.newLine();
-					writer.flush();
-					writer.close();
-		} catch (Exception e) { // TODO
-			e.printStackTrace();
-		}
-		 
+		NeuralNetwork generator = new NeuralNetwork();
+		Encoder enc = new BlosumEncoder(50);
+		Instances trainingsdata = EncodeParser.readTrainingAndEncode("project_training.txt", true, enc);
+		generator.generateANN(trainingsdata, "Blosum50Binary");
 
 	}
-
+	*/
 }

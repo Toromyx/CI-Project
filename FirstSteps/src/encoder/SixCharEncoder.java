@@ -2,34 +2,10 @@ package encoder;
 /**
  * @author Friederike
  */
-import java.util.ArrayList;
-
-import weka.core.Attribute;
-import weka.core.DenseInstance;
-import weka.core.Instance;
-import weka.core.Instances;
 
 public class SixCharEncoder extends Encoder {
 
-//	public Instances encodeAll(String p) {
-//
-//		ArrayList<Attribute> attr = new ArrayList();
-//		AminoAcid[] seq = AAInterface.stringToAA(p);
-//		attr.add(new Attribute("first"));
-//		attr.add(new Attribute("second"));
-//		attr.add(new Attribute("third"));
-//		attr.add(new Attribute("fourth"));
-//		attr.add(new Attribute("fifth"));
-//		attr.add(new Attribute("sixth"));
-//
-//		Instances dataset = new Instances("Encoding", attr, 6);
-//
-//		for (int i = 0; i < p.length(); i++) {
-//			dataset.add(encodeSingle(seq[i]));
-//		}
-//
-//		return dataset;
-//	}
+
 
 	public int[] encodeSingle(AminoAcid aa) {
 
