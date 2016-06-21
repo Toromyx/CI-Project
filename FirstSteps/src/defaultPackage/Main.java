@@ -1,5 +1,7 @@
 package defaultPackage;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 /**
  * 
  * @author Friederike
@@ -7,6 +9,9 @@ package defaultPackage;
  */
 import java.io.IOException;
 
+import encoder.BlosumEncoder;
+import encoder.Encoder;
+import encoder.SixCharEncoder;
 import neuralNetworks.NeuralNetwork;
 import parser.EncodeParser;
 import weka.core.Instances;
@@ -17,9 +22,8 @@ import weka.core.Instances;
  * DATAFILENAME ENCODING ANN OUTPUTFILENAME
  * 
  */
-public class Main {
+public class Main implements EncodeParser{
 
-	private static EncodeParser parser;
 	private static Instances predictData;
 
 	/**
@@ -33,10 +37,11 @@ public class Main {
 	}
 
 	// TODO not sure how to apply the encoderParser interface here
-	private static Instances initializeData(String predictData, String encoding) throws IOException {
-		// Instances data =
-
-		return null;
+	private static Instances initializeData(String inputFile, String encoding) throws IOException {
+		//auslagern 
+		Encoder enc = new BlosumEncoder();
+		predictData = EncodeParser.readInputAndEncode(inputFile, enc);
+		return predictData;
 	}
 
 	/**
@@ -51,10 +56,12 @@ public class Main {
 	 */
 	private static Instances applyANN(String encoding, String annName, Instances data) throws Exception {
 		String chosenAnn = chooseANN(encoding, annName);
+		System.out.println(chosenAnn);
 		NeuralNetwork ann = new NeuralNetwork(chosenAnn);
 		return ann.classifyData(data);
 	}
 
+	//TODO 6bit -> 6char
 	/**
 	 * According to the encoding and the ann name the method returns the
 	 * filename of the ANN that should be used
@@ -64,9 +71,11 @@ public class Main {
 	 * @return
 	 */
 	private static String chooseANN(String encoding, String annName) {
-		if (encoding.equals("6bit")) {
+		return "Blosum50Binary";
+		/*
+		if (encoding.equals("6Char")) {
 			if (annName.equals("IC50")) {
-				return "6bitIC50";
+				return "6CharIC50";
 			}
 			if (annName.equals("Binary")) {
 				return "6bitBinary";
@@ -269,7 +278,7 @@ public class Main {
 
 		}
 
-		return null;
+		return null;*/
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -278,21 +287,20 @@ public class Main {
 			printHelp();
 		} else {
 			try {
-				//TODO
-				parser = new EncodeParser() {
-				};
-
 				predictData = initializeData(args[0], args[1]);
-				applyANN(args[2], args[3], predictData);
-				//write data to file 
+				Instances predictedData = applyANN(args[2], args[3], predictData);
+				
+				
+				EncodeParser.writeOutput(args[3], args[0], predictedData);
 
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.err.println("Your input could not be processed.");
 			}
 		}
 
 	}
-
+ /*
 	private static void validate() {
 		// to make Filters work (because of the "Cannot handle numeric
 		// class!"-Exception)
@@ -339,5 +347,5 @@ public class Main {
 		eval.evaluateModel(ann, train);
 		System.out.println("Evaluation results (now for train-set, just to make sure it works):");
 		System.out.println(eval.toSummaryString());
-	}
+	}*/
 }
