@@ -2,8 +2,8 @@ package neuralNetworks;
 
 import java.io.IOException;
 
+import encoder.BlosumEncoder;
 import encoder.Encoder;
-import encoder.SixCharEncoder;
 import parser.EncodeParser;
 /**
  * @author Friederike
@@ -97,14 +97,14 @@ public class NeuralNetwork implements EncodeParser{
 	/**
 	 * Needed to separately generate ANNs. 
 	 */
-	/*
+	
 	public static void main(String[] args) throws IOException {
 
 		NeuralNetwork generator = new NeuralNetwork();
-		Encoder enc = new SixCharEncoder();
-		Instances trainingsdata = EncodeParser.readTrainingAndEncode("project_training.txt", true, enc);
-		generator.generateANN(trainingsdata, "6CharBinary");
+		Encoder enc = new BlosumEncoder(55);
+		Instances trainingsdata = EncodeParser.readTrainingAndEncode("project_training.txt", false, enc);
+		generator.generateANN(trainingsdata, "ModelANNs/blosum55IC50");
 
 	}
-	*/
+	
 }

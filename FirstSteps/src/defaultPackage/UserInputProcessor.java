@@ -247,7 +247,9 @@ public class UserInputProcessor implements EncodeParser {
 	 * @throws Exception
 	 */
 	private Instances applyANN(String chosenAnn) throws Exception {
-		NeuralNetwork ann = new NeuralNetwork(chosenAnn);
+		String annName = "ModelANNs/" + chosenAnn;
+		System.out.println(annName);
+		NeuralNetwork ann = new NeuralNetwork(annName);
 		return ann.classifyData(predictData);
 	}
 	
@@ -276,8 +278,8 @@ public class UserInputProcessor implements EncodeParser {
 		blub[0] = "test_input.txt";
 		blub[1] = "6Char";
 		blub[2] = "Binary";
-		blub[3] = "blub.txt";
-		UserInputProcessor test = new UserInputProcessor(blub);
+		blub[3] = "blubblub.txt";
+		UserInputProcessor test = new UserInputProcessor(blub[0],blub[1],blub[2],blub[3]);
 		test.initializeEncoder();
 		try {
 			test.initializeData();
