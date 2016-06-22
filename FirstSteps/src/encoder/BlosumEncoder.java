@@ -11,9 +11,9 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 	protected static int[] blosumNums = {30, 35, 40, 45, 50, 55, 60, 62, 65, 70, 75, 80, 85, 90, 100};
 	protected static boolean[] blosumExists = new boolean[101];
 
-	static {
+	{
 		for (int i=0; i<blosumNums.length; i++){
-			blosumExists[i] = true;
+			blosumExists[blosumNums[i]] = true;
 		}
 	}
 
@@ -110,4 +110,5 @@ public class BlosumEncoder extends Encoder implements BlosumInterface{
 	public int[] encodeSingle(AminoAcid aa) {
 		return BlosumInterface.getRow(aa, blosumNum);
 	}
+	
 }
