@@ -19,7 +19,7 @@ public class Parser {
 
 	private static Instances data;
 
-	public Parser() throws IOException {
+	private Parser() throws IOException {
 		 data = null;
 		
 	}

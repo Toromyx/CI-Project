@@ -71,8 +71,8 @@ public class NeuralNetwork implements EncodeParser{
 		MultilayerPerceptron ann = new MultilayerPerceptron();
 		ann.setLearningRate(0.1);
 		ann.setMomentum(0.2);
-		ann.setTrainingTime(100);
-		ann.setHiddenLayers("80,1"); // sets number nodes in the hidden layer: 2
+		ann.setTrainingTime(2000);
+		ann.setHiddenLayers("80"); // sets number nodes in the hidden layer: 2
 										// hidden layers one with 80 one with 1
 										// -> output layer
 

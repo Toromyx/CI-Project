@@ -45,13 +45,14 @@ public class Validate {
 	public Validate(Instances encodedData) throws Exception{
 		
 		this.data = encodedData;
+		data.setClassIndex(data.numAttributes()-1);
 		
 		/**
 		 * Temporary Constructor 
 		 */
 		// to make Filters work (because of the "Cannot handle numeric
 		// class!"-Exception)
-		NumericToNominal NtoN = new NumericToNominal();
+		/*NumericToNominal NtoN = new NumericToNominal();
 		NtoN.setInputFormat(encodedData);
 		encodedData = Filter.useFilter(encodedData, NtoN);
 
@@ -69,21 +70,24 @@ public class Validate {
 		this.test = Filter.useFilter(encodedData, res);	
 		
 		train.setClassIndex(train.numAttributes()-1);
-		test.setClassIndex(test.numAttributes()-1);
+		test.setClassIndex(test.numAttributes()-1);*/
 	}
 	
 	private static void CrossValidate(MultilayerPerceptron ann) throws Exception {
 		
 		System.out.println("Cross-Validatoin Output:");
 		// create Evaluation for Cross-Validation
-		// jetzt nur für train-set, danach für ganze Data
-//		Evaluation CV = new Evaluation(data);
-		Evaluation CV = new Evaluation(train);
+		// jetzt nur fï¿½r train-set, danach fï¿½r ganze Data
+		Evaluation CV = new Evaluation(data);
+//		Evaluation CV = new Evaluation(train);
 		Random rand = new Random(1);
 		
 //		CV.crossValidateModel(ann, data, 10, rand);
-		CV.crossValidateModel(ann, train, 10, rand);
+		CV.crossValidateModel(ann, data, 10, rand);
 		System.out.println(CV.toSummaryString());
+		System.out.println("Confusion Matrix:");
+		System.out.println(CV.toMatrixString());
+		
 	}
 	
 	public static void testANN(MultilayerPerceptron ann) throws Exception{
@@ -95,8 +99,14 @@ public class Validate {
 		System.out.println(eval.toSummaryString());	
 	}
 	
-//	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
+		NineBitEncoder encode = new NineBitEncoder();
+		Instances data = parser.EncodeParser.readInputAndEncode("project_training.txt", encode);
 		
-//	}
+		MultilayerPerceptron ann = new MultilayerPerceptron();
+		
+		Validate val = new Validate(data);
+		val.CrossValidate(ann);
+	}
 
 }
