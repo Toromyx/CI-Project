@@ -15,6 +15,7 @@ import java.util.Random;
 
 import com.sun.xml.internal.bind.v2.runtime.output.Encoded;
 
+import encoder.Encoder;
 import encoder.NineBitEncoder;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.MultilayerPerceptron;
@@ -41,8 +42,17 @@ public class Validate {
 	 * for End-Version 
 	 */
 	private static Instances data;
+	private MultilayerPerceptron ann;
+	private Encoder encoder;
+	private double momentum;
+	private double learningRate; 
+	private int learningSteps; 
+	private String HiddenLayers;
+ 	
+	
 		
-	public Validate(Instances encodedData) throws Exception{
+	public Validate(Instances encodedData, Encoder encoder, 
+			double m, double rate, int steps, String HiddenLayers) throws Exception{
 		
 		this.data = encodedData;
 		data.setClassIndex(data.numAttributes()-1);
@@ -105,8 +115,8 @@ public class Validate {
 		
 		MultilayerPerceptron ann = new MultilayerPerceptron();
 		
-		Validate val = new Validate(data);
-		val.CrossValidate(ann);
+//		Validate val = new Validate(data);
+//		val.CrossValidate(ann);
 	}
 
 }
