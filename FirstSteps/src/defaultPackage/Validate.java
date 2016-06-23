@@ -1,64 +1,92 @@
 package defaultPackage;
 
+/**
+ * 
+ * @author Daria
+ * 
+ */
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import java.util.Random;
 
+import com.sun.xml.internal.bind.v2.runtime.output.Encoded;
+
+import encoder.NineBitEncoder;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.supervised.instance.Resample;
 import weka.filters.unsupervised.attribute.NumericToNominal;
+import weka.core.converters.CSVLoader;
+
+/**
+ * Class for Cross-Validation and Evaluation of the given ANN
+ *  
+ */
 
 public class Validate {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	/**
+	 * Temporary  
+	 * for testing the ANN after Cross-Validation
+	 */
+	private static Instances train;
+	private static Instances test;
 	
-	private static void validate(MultilayerPerceptron ann, Instances encodedData) throws Exception {
+	/**
+	 * for End-Version 
+	 */
+	private static Instances data;
+		
+	public Validate(Instances encodedData) throws Exception{
+		
+		this.data = encodedData;
+		
+		/**
+		 * Temporary Constructor 
+		 */
 		// to make Filters work (because of the "Cannot handle numeric
 		// class!"-Exception)
-		/*NumericToNominal NtoN = new NumericToNominal();
+		NumericToNominal NtoN = new NumericToNominal();
 		NtoN.setInputFormat(encodedData);
 		encodedData = Filter.useFilter(encodedData, NtoN);
 
-		// filter the Data to create 2 data-sets for the training and the
-		// cross-validation
+		// filter the Data to create 2 data-sets for the
+		// cross-validation 
 		Resample res = new Resample();
 		res.setNoReplacement(true);
 		res.setSampleSizePercent(80);
 		res.setInputFormat(encodedData);
 
-		Instances train = Filter.useFilter(encodedData, res);
+		this.train = Filter.useFilter(encodedData, res);
 
 		res.setInvertSelection(true);
 		res.setInputFormat(encodedData);
-		Instances crossV = Filter.useFilter(encodedData, res);
-
-		// create ann with train
-		/*MultilayerPerceptron ann = new MultilayerPerceptron();
-		ann.setLearningRate(0.1);
-		ann.setMomentum(0.9);
-		ann.setTrainingTime(10); // sonst dauert ewig
-		// ann.setGUI(true);
-		ann.setHiddenLayers("80,1");
-		ann.buildClassifier(train);
-		System.out.println();
-		System.out.println("ANN is created");
-		System.out.println();
-		// System.out.println(ann.toString());*/
-
-		System.out.println("Cross-Validatoin Output:");
-		// create Evaluation for Cross-Validation
-		Evaluation CV = new Evaluation(encodedData);
-		Random rand = new Random(1);
-		CV.crossValidateModel(ann, encodedData, 10, rand);
-		System.out.println(CV.toSummaryString());
-
+		this.test = Filter.useFilter(encodedData, res);	
+		
+		train.setClassIndex(train.numAttributes()-1);
+		test.setClassIndex(test.numAttributes()-1);
 	}
 	
-	public static void testANN(MultilayerPerceptron ann, Instances test) throws Exception{
+	private static void CrossValidate(MultilayerPerceptron ann) throws Exception {
+		
+		System.out.println("Cross-Validatoin Output:");
+		// create Evaluation for Cross-Validation
+		// jetzt nur für train-set, danach für ganze Data
+//		Evaluation CV = new Evaluation(data);
+		Evaluation CV = new Evaluation(train);
+		Random rand = new Random(1);
+		
+//		CV.crossValidateModel(ann, data, 10, rand);
+		CV.crossValidateModel(ann, train, 10, rand);
+		System.out.println(CV.toSummaryString());
+	}
+	
+	public static void testANN(MultilayerPerceptron ann) throws Exception{
 		// create Evaluation (now for train-set, just to make sure it works)
 		Evaluation eval = new Evaluation(test);
 		System.out.println();
@@ -66,5 +94,9 @@ public class Validate {
 		System.out.println("Evaluation results:");
 		System.out.println(eval.toSummaryString());	
 	}
+	
+//	public static void main(String[] args) throws Exception {
+		
+//	}
 
 }
