@@ -1,21 +1,28 @@
 package defaultPackage;
 
+import java.awt.BorderLayout;
+import java.text.DecimalFormat;
+
 /**
  * 
  * @author Daria
  * 
  */
 
+import java.util.*;
 import java.util.Random;
 import encoder.Encoder;
 import encoder.NineBitEncoder;
 import encoder.SixCharEncoder;
 import weka.classifiers.Evaluation;
+import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.supervised.instance.Resample;
 import weka.filters.unsupervised.attribute.NumericToNominal;
+import weka.gui.visualize.PlotData2D;
+import weka.gui.visualize.ThresholdVisualizePanel;
 
 /**
  * Class for Cross-Validation and Evaluation of the given ANN
@@ -56,7 +63,7 @@ public class Validation {
 	 * @throws Exception
 	 */
 	
-	public void CrossValidate(double momentum, double learningRate, int learningSteps, String HiddenLayers)
+	public void CrossValidateNumeric(double momentum, double learningRate, int learningSteps, String HiddenLayers)
 			throws Exception {
 		
 		this.ann.setLearningRate(learningRate);
@@ -68,15 +75,39 @@ public class Validation {
 		Random rand = new Random(1);
 		CV.crossValidateModel(this.ann, this.encodedData, 10, rand);
 		
+		System.out.println("For numeric Attributes: ");
 		printResults(CV);
+	}
+	
+	public void CrossValidateNominal(double momentum, double learningRate, int learningSteps, String HiddenLayers)
+			throws Exception {
+		
+		NumericToNominal NtoN = new NumericToNominal();
+        NtoN.setInputFormat(this.encodedData);
+        Instances nominalData = Filter.useFilter(this.encodedData, NtoN);
+		
+		this.ann.setLearningRate(learningRate);
+		this.ann.setMomentum(momentum);
+		this.ann.setTrainingTime(learningSteps);
+		this.ann.setHiddenLayers(HiddenLayers); 
+        
+        Evaluation CV = new Evaluation(nominalData);
+		Random rand = new Random(1);
+		CV.crossValidateModel(this.ann, nominalData, 10, rand);
+		
+		System.out.println("For nominal Attributes: ");
+		printResults(CV);
+		System.out.println(CV.toMatrixString());
+		printROC(CV);
 	}
 	
 	/**
 	 * Help function for printing the cross validation results.
 	 * @param eval
+	 * @throws Exception 
 	 */
 	
-	private void printResults(Evaluation eval){
+	private void printResults(Evaluation eval) throws Exception{
 		System.out.println("The given encoder is "+this.encoder.getClass());
 		System.out.println("Cross-Validatoin Output for the following parameters:");
 		System.out.println("Momentum-term: "+this.ann.getMomentum());
@@ -85,9 +116,45 @@ public class Validation {
 		System.out.println("Number of Hidden Layers: "+this.ann.getHiddenLayers());
 		System.out.println();		
 		System.out.println(eval.toSummaryString());
+	}
+	
+	private void printROC(Evaluation eval) throws Exception{
 		
-//		System.out.println("Confusion Matrix:");
-//		System.out.println(eval.toMatrixString());	
+		// generate curve
+	    ThresholdCurve tc = new ThresholdCurve();
+	    int classIndex = 0;//this.encodedData.numAttributes()-1; //THE LAST INDEX 
+	    Instances result = tc.getCurve(eval.predictions(), classIndex);
+	    System.out.println("Area under the ROC-Curve: "+tc.getROCArea(result));
+	    
+	     // plot curve
+	    ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
+	    DecimalFormat f = new DecimalFormat("#0.000");
+	    vmc.setROCString("(Area under ROC = " + f.format(tc.getROCArea(result))+")");
+	    vmc.setName(result.relationName());
+	    PlotData2D tempd = new PlotData2D(result);
+	    tempd.setPlotName(result.relationName());
+	    tempd.addInstanceNumberAttribute();
+	    // specify which points are connected
+	    boolean[] cp = new boolean[result.numInstances()];
+	    for (int n = 1; n < cp.length; n++)
+	    	cp[n] = true;
+	    tempd.setConnectPoints(cp);
+	    // add plot
+	    vmc.addPlot(tempd);
+	 
+	    // display curve
+	    String plotName = vmc.getName();
+	    final javax.swing.JFrame jf =
+	      new javax.swing.JFrame("Weka Classifier Visualize: "+plotName);
+	    jf.setSize(500,400);
+	    jf.getContentPane().setLayout(new BorderLayout());
+	    jf.getContentPane().add(vmc, BorderLayout.CENTER);
+	    jf.addWindowListener(new java.awt.event.WindowAdapter() {
+	    	public void windowClosing(java.awt.event.WindowEvent e) {
+	    		jf.dispose();
+	    	}
+	    });
+	    jf.setVisible(true);
 	}
 	
 	/**
@@ -98,14 +165,13 @@ public class Validation {
 	public static void main(String[] args) throws Exception {
 		
 		SixCharEncoder encode = new SixCharEncoder();
-		Instances data = parser.EncodeParser.readInputAndEncode("train_mini.txt", encode);
-//		Instances data = parser.EncodeParser.readInputAndEncode("project_training.txt", encode);
+		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", true, encode);
 		data.setClassIndex(data.numAttributes()-1);
-//		System.out.println(data.instance(0));
 		
 		//do the Validation
 		Validation val = new Validation(data, encode);
-		val.CrossValidate(0.7, 0.05, 1000, "9");
+		val.CrossValidateNumeric(0.9, 0.01, 1000, "9");
+		val.CrossValidateNominal(0.9, 0.01, 1000, "9");
 	}
 
 }
