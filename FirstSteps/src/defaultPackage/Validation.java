@@ -8,9 +8,14 @@ package defaultPackage;
 
 import java.util.Random;
 import encoder.Encoder;
+import encoder.NineBitEncoder;
+import encoder.SixCharEncoder;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.supervised.instance.Resample;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 
 /**
  * Class for Cross-Validation and Evaluation of the given ANN
@@ -25,7 +30,7 @@ public class Validation {
 		
 	/**
 	 * The constructor create an object of the class Validation for a given data set and encoder. 
-	 * The data set will be encoded and saved as class field.
+	 * The data set is encoded by function "readInputAndEncode" and will be saved as class field.
 	 * The empty ANN will be created.    
 	 * 
 	 * @param data : the training data set
@@ -35,7 +40,7 @@ public class Validation {
 	
 	public Validation(Instances data, Encoder encoder) throws Exception{
 		
-		this.encodedData = encoder.encodeAll(data);
+		this.encodedData = data;//encoder.encodeAll(data);
 		encodedData.setClassIndex(encodedData.numAttributes()-1);
 		this.ann = new MultilayerPerceptron();
 		this.encoder=encoder;
@@ -85,9 +90,22 @@ public class Validation {
 //		System.out.println(eval.toMatrixString());	
 	}
 	
-	
-//	public static void main(String[] args) throws Exception {
-	
-//	}
+	/**
+	 * for Testing
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+		
+		SixCharEncoder encode = new SixCharEncoder();
+		Instances data = parser.EncodeParser.readInputAndEncode("train_mini.txt", encode);
+//		Instances data = parser.EncodeParser.readInputAndEncode("project_training.txt", encode);
+		data.setClassIndex(data.numAttributes()-1);
+//		System.out.println(data.instance(0));
+		
+		//do the Validation
+		Validation val = new Validation(data, encode);
+		val.CrossValidate(0.7, 0.05, 1000, "9");
+	}
 
 }
