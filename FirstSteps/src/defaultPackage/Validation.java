@@ -73,7 +73,7 @@ public class Validation {
 		
 		Evaluation CV = new Evaluation(this.encodedData);
 		Random rand = new Random(1);
-		CV.crossValidateModel(this.ann, this.encodedData, 10, rand);
+		CV.crossValidateModel(this.ann, this.encodedData, 4, rand);
 		
 		System.out.println("For numeric Attributes: ");
 		printResults(CV);
@@ -93,7 +93,7 @@ public class Validation {
         
         Evaluation CV = new Evaluation(nominalData);
 		Random rand = new Random(1);
-		CV.crossValidateModel(this.ann, nominalData, 10, rand);
+		CV.crossValidateModel(this.ann, nominalData, 4, rand);
 		
 		System.out.println("For nominal Attributes: ");
 		printResults(CV);
@@ -170,8 +170,8 @@ public class Validation {
 		
 		//do the Validation
 		Validation val = new Validation(data, encode);
-		val.CrossValidateNumeric(0.9, 0.01, 1000, "9");
-		val.CrossValidateNominal(0.9, 0.01, 1000, "9");
+		val.CrossValidateNumeric(0.9, 0.05, 10000, "5");
+		val.CrossValidateNominal(0.9, 0.05, 10000, "5");
 	}
 
 }
