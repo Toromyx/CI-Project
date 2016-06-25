@@ -63,7 +63,8 @@ public class Validation {
 	 * @throws Exception
 	 */
 	
-	public void CrossValidateNumeric(double momentum, double learningRate, int learningSteps, String HiddenLayers)
+	public void CrossValidateNumeric(int foldsNumber, 
+			double momentum, double learningRate, int learningSteps, String HiddenLayers)
 			throws Exception {
 		
 		this.ann.setLearningRate(learningRate);
@@ -73,13 +74,14 @@ public class Validation {
 		
 		Evaluation CV = new Evaluation(this.encodedData);
 		Random rand = new Random(1);
-		CV.crossValidateModel(this.ann, this.encodedData, 4, rand);
+		CV.crossValidateModel(this.ann, this.encodedData, foldsNumber, rand);
 		
 		System.out.println("For numeric Attributes: ");
 		printResults(CV);
 	}
 	
-	public void CrossValidateNominal(double momentum, double learningRate, int learningSteps, String HiddenLayers)
+	public void CrossValidateNominal(int foldsNumber, 
+			double momentum, double learningRate, int learningSteps, String HiddenLayers)
 			throws Exception {
 		
 		NumericToNominal NtoN = new NumericToNominal();
@@ -93,7 +95,7 @@ public class Validation {
         
         Evaluation CV = new Evaluation(nominalData);
 		Random rand = new Random(1);
-		CV.crossValidateModel(this.ann, nominalData, 4, rand);
+		CV.crossValidateModel(this.ann, nominalData, foldsNumber, rand);
 		
 		System.out.println("For nominal Attributes: ");
 		printResults(CV);
@@ -164,14 +166,18 @@ public class Validation {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		SixCharEncoder encode = new SixCharEncoder();
-		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", true, encode);
+//		SixCharEncoder encode = new SixCharEncoder();
+		NineBitEncoder encode = new NineBitEncoder();
+//		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", true, encode);
+		Instances data = parser.EncodeParser.readTrainingAndEncode("project_training.txt", true, encode);
 		data.setClassIndex(data.numAttributes()-1);
 		
 		//do the Validation
 		Validation val = new Validation(data, encode);
-		val.CrossValidateNumeric(0.9, 0.05, 10000, "5");
-		val.CrossValidateNominal(0.9, 0.05, 10000, "5");
+		
+		// best number of hidden layers for sixchar-encoding: 5
+		val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "9");
+		val.CrossValidateNominal(10, 0.9, 0.05, 1000, "9");
 	}
 
 }
