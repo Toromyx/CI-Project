@@ -77,7 +77,7 @@ public class Validation {
 		CV.crossValidateModel(this.ann, this.encodedData, foldsNumber, rand);
 		
 		System.out.println("For numeric Attributes: ");
-		printResults(CV);
+		printResults(CV, foldsNumber);
 	}
 	
 	public void CrossValidateNominal(int foldsNumber, 
@@ -98,7 +98,7 @@ public class Validation {
 		CV.crossValidateModel(this.ann, nominalData, foldsNumber, rand);
 		
 		System.out.println("For nominal Attributes: ");
-		printResults(CV);
+		printResults(CV, foldsNumber);
 		System.out.println(CV.toMatrixString());
 		printROC(CV);
 	}
@@ -109,9 +109,11 @@ public class Validation {
 	 * @throws Exception 
 	 */
 	
-	private void printResults(Evaluation eval) throws Exception{
+	private void printResults(Evaluation eval, int numOfFolds) throws Exception{
 		System.out.println("The given encoder is "+this.encoder.getClass());
 		System.out.println("Cross-Validatoin Output for the following parameters:");
+		System.out.println();
+		System.out.println("Number of Folds: "+numOfFolds);
 		System.out.println("Momentum-term: "+this.ann.getMomentum());
 		System.out.println("Learning Rate: "+this.ann.getLearningRate());
 		System.out.println("Training Time: "+this.ann.getTrainingTime());
@@ -174,9 +176,7 @@ public class Validation {
 		
 		//do the Validation
 		Validation val = new Validation(data, encode);
-		
-		// best number of hidden layers for sixchar-encoding: 5
-		val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "9");
+//		val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "9");
 		val.CrossValidateNominal(10, 0.9, 0.05, 1000, "9");
 	}
 
