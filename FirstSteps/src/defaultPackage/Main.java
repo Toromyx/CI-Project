@@ -22,7 +22,7 @@ public class Main{
 		System.out.println("Please give the input in the following order: testdata-filename encoding anntype output-filename");
 		System.out.println(
 				"encoding: 6Char \n" + "	  9Bit \n" + " 	  blosumX: X=[30,35,...,60,62,65,70,75,...,90,100]");
-		System.out.println("ann: IC50 \n" + "     Binary \n" + "     Combined");
+		System.out.println("ann: IC50 \n" + "     Binary \n");
 	}
 
 	public static void main(String[] args) throws IOException {

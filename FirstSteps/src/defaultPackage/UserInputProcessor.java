@@ -104,136 +104,102 @@ public class UserInputProcessor implements EncodeParser {
 				return "6CharIC50";
 			}else if (annType.equals("Binary")) {
 				return "6CharBinary";
-			}else if (annType.equals("Combined")) {
-				return "6CharCombined";
 			}
 		}else if(encoding.equals("9Bit")) {
 			if (annType.equals("IC50")) {
 				return "9BitIC50";
 			}else if (annType.equals("Binary")) {
 				return "9BitBinary";
-			}else if(annType.equals("Combined")) {
-				return "9BitCombined";
 			}
 		}else if (encoding.equals("blosum30")) {
 			if (annType.equals("IC50")) {
 				return "blosum30IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum30Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum30Combined";
 			}
 		} else if (encoding.equals("blosum35")) {
 			if (annType.equals("IC50")) {
 				return "blosum35IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum35Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum35Combined";
 			}
 		}else if (encoding.equals("blosum40")) {
 			if (annType.equals("IC50")) {
 				return "blosum40IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum40Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum40Combined";
 			}
 		}else if (encoding.equals("blosum45")) {
 			if (annType.equals("IC50")) {
 				return "blosum45IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum45Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum45Combined";
 			}
 		}else if (encoding.equals("blosum50")) {
 			if (annType.equals("IC50")) {
 				return "blosum50IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum50Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum50Combined";
 			}
 		}else if (encoding.equals("blosum55")) {
 			if (annType.equals("IC50")) {
 				return "blosum55IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum55Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum55Combined";
 			}
 		}else if (encoding.equals("blosum60")) {
 			if (annType.equals("IC50")) {
 				return "blosum60IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum60Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum60Combined";
 			}
 		}else if (encoding.equals("blosum62")) {
 			if (annType.equals("IC50")) {
 				return "blosum62IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum62Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum62Combined";
 			}
 		}else if (encoding.equals("blosum65")) {
 			if (annType.equals("IC50")) {
 				return "blosum65IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum65Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum65Combined";
 			}
 		}else if (encoding.equals("blosum70")) {
 			if (annType.equals("IC50")) {
 				return "blosum70IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum70Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum70Combined";
 			}
 		}else if (encoding.equals("blosum75")) {
 			if (annType.equals("IC50")) {
 				return "blosum75IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum75Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum75Combined";
 			}
 		}else if (encoding.equals("blosum80")) {
 			if (annType.equals("IC50")) {
 				return "blosum80IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum80Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum80Combined";
 			}
 		}else if (encoding.equals("blosum85")) {
 			if (annType.equals("IC50")) {
 				return "blosum85IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum85Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum85Combined";
 			}
 		}else if (encoding.equals("blosum90")) {
 			if (annType.equals("IC50")) {
 				return "blosum90IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum90Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum90Combined";
 			}
 		}else if (encoding.equals("blosum100")) {
 			if (annType.equals("IC50")) {
 				return "blosum100IC50";
 			}else if (annType.equals("Binary")) {
 				return "blosum100Binary";
-			}else if (annType.equals("Combined")) {
-				return "blosum100Combined";
 			}
 		}
 
