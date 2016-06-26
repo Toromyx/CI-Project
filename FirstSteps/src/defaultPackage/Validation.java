@@ -9,7 +9,6 @@ package defaultPackage;
 import java.awt.BorderLayout;
 import java.text.DecimalFormat;
 import java.util.Random;
-
 import encoder.BlosumEncoder;
 import encoder.Encoder;
 import encoder.NineBitEncoder;
