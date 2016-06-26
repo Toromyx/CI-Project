@@ -1,16 +1,16 @@
 package defaultPackage;
 
-import java.awt.BorderLayout;
-import java.text.DecimalFormat;
-
 /**
  * 
  * @author Daria
  * 
  */
 
-import java.util.*;
+import java.awt.BorderLayout;
+import java.text.DecimalFormat;
 import java.util.Random;
+
+import encoder.BlosumEncoder;
 import encoder.Encoder;
 import encoder.NineBitEncoder;
 import encoder.SixCharEncoder;
@@ -19,7 +19,6 @@ import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 import weka.filters.Filter;
-import weka.filters.supervised.instance.Resample;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 import weka.gui.visualize.PlotData2D;
 import weka.gui.visualize.ThresholdVisualizePanel;
@@ -36,26 +35,28 @@ public class Validation {
 	private Encoder encoder;
 		
 	/**
-	 * The constructor create an object of the class Validation for a given data set and encoder. 
-	 * The data set is encoded by function "readInputAndEncode" and will be saved as class field.
-	 * The empty ANN will be created.    
+	 * The constructor creates an object of the class Validation for a given data set and encoder. 
+	 * The data set is already encoded by the function "parser.readInputAndEncode" and can be saved as a class field.
+	 * An empty ANN will be created.    
 	 * 
-	 * @param data : the training data set
-	 * @param encoder : chosen encoding type
+	 * @param data the training data set
+	 * @param encoder chosen encoding type
 	 * @throws Exception
 	 */
 	
 	public Validation(Instances data, Encoder encoder) throws Exception{
 		
-		this.encodedData = data;//encoder.encodeAll(data);
+		this.encodedData = data;
 		encodedData.setClassIndex(encodedData.numAttributes()-1);
 		this.ann = new MultilayerPerceptron();
 		this.encoder=encoder;
 	}
 	
 	/**
-	 * Cross-Validation of the ANN with given network parameters to the encoded data set.
+	 * Cross-Validation of the ANN with given network parameters and the encoded data set.
+	 * The attributes of the data set are real numbers, so their type in Weka is NUMERIC. 
 	 * 
+	 * @param foldsNumber
 	 * @param momentum
 	 * @param learningRate
 	 * @param learningSteps
@@ -67,36 +68,56 @@ public class Validation {
 			double momentum, double learningRate, int learningSteps, String HiddenLayers)
 			throws Exception {
 		
+		//set network parameters 
 		this.ann.setLearningRate(learningRate);
 		this.ann.setMomentum(momentum);
 		this.ann.setTrainingTime(learningSteps);
 		this.ann.setHiddenLayers(HiddenLayers); 
 		
+		//do validation 
 		Evaluation CV = new Evaluation(this.encodedData);
 		Random rand = new Random(1);
 		CV.crossValidateModel(this.ann, this.encodedData, foldsNumber, rand);
 		
+		//print results
 		System.out.println("For numeric Attributes: ");
 		printResults(CV, foldsNumber);
 	}
+	
+	/**
+	 * Cross-Validation of the ANN with given network parameters and the encoded data set.
+	 * The type of attributes in the encoded data set is changed to NOMINAL using Weka filter NumericToNominal. 
+	 * Nominal attributes allow creating of ROC-curves and confusion matrixes. 
+	 * 
+	 * @param foldsNumber
+	 * @param momentum
+	 * @param learningRate
+	 * @param learningSteps
+	 * @param HiddenLayers
+	 * @throws Exception
+	 */
 	
 	public void CrossValidateNominal(int foldsNumber, 
 			double momentum, double learningRate, int learningSteps, String HiddenLayers)
 			throws Exception {
 		
+		//make attributes nominal
 		NumericToNominal NtoN = new NumericToNominal();
         NtoN.setInputFormat(this.encodedData);
         Instances nominalData = Filter.useFilter(this.encodedData, NtoN);
 		
+        //set network parameters
 		this.ann.setLearningRate(learningRate);
 		this.ann.setMomentum(momentum);
 		this.ann.setTrainingTime(learningSteps);
 		this.ann.setHiddenLayers(HiddenLayers); 
         
+		//do validation
         Evaluation CV = new Evaluation(nominalData);
 		Random rand = new Random(1);
 		CV.crossValidateModel(this.ann, nominalData, foldsNumber, rand);
 		
+		//print results
 		System.out.println("For nominal Attributes: ");
 		printResults(CV, foldsNumber);
 		System.out.println(CV.toMatrixString());
@@ -104,8 +125,9 @@ public class Validation {
 	}
 	
 	/**
-	 * Help function for printing the cross validation results.
-	 * @param eval
+	 * Help function for printing the cross validation results for given network parameters.
+	 * 
+	 * @param eval Cross-Validation of the encoded data and given ANN
 	 * @throws Exception 
 	 */
 	
@@ -122,35 +144,43 @@ public class Validation {
 		System.out.println(eval.toSummaryString());
 	}
 	
+	/**
+	 * The function for creating and plotting the ROC-curve using the Weka-GUI and JavaFX.
+	 * Can be used only in the function CrossValidateNominal.
+	 *  
+	 * @param eval Cross-Validation for encoded data and given ANN
+	 * @throws Exception
+	 */
+	
 	private void printROC(Evaluation eval) throws Exception{
 		
 		// generate curve
 	    ThresholdCurve tc = new ThresholdCurve();
-	    int classIndex = 0;//this.encodedData.numAttributes()-1; //THE LAST INDEX 
+	    int classIndex = 0;
 	    Instances result = tc.getCurve(eval.predictions(), classIndex);
-	    System.out.println("Area under the ROC-Curve: "+tc.getROCArea(result));
+	    System.out.println("Area under the ROC-Curve: "+ThresholdCurve.getROCArea(result));
 	    
-	     // plot curve
+	    // plot curve
 	    ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
-	    DecimalFormat f = new DecimalFormat("#0.000");
-	    vmc.setROCString("(Area under ROC = " + f.format(tc.getROCArea(result))+")");
+	    DecimalFormat df = new DecimalFormat("#0.000");
+	    vmc.setROCString("(Area under ROC = " + df.format(ThresholdCurve.getROCArea(result))+")");
 	    vmc.setName(result.relationName());
+	    
 	    PlotData2D tempd = new PlotData2D(result);
 	    tempd.setPlotName(result.relationName());
 	    tempd.addInstanceNumberAttribute();
-	    // specify which points are connected
+	    
 	    boolean[] cp = new boolean[result.numInstances()];
 	    for (int n = 1; n < cp.length; n++)
 	    	cp[n] = true;
 	    tempd.setConnectPoints(cp);
-	    // add plot
 	    vmc.addPlot(tempd);
 	 
 	    // display curve
 	    String plotName = vmc.getName();
 	    final javax.swing.JFrame jf =
 	      new javax.swing.JFrame("Weka Classifier Visualize: "+plotName);
-	    jf.setSize(500,400);
+	    jf.setSize(600,500);
 	    jf.getContentPane().setLayout(new BorderLayout());
 	    jf.getContentPane().add(vmc, BorderLayout.CENTER);
 	    jf.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -169,7 +199,9 @@ public class Validation {
 	public static void main(String[] args) throws Exception {
 		
 //		SixCharEncoder encode = new SixCharEncoder();
-		NineBitEncoder encode = new NineBitEncoder();
+		BlosumEncoder encode = new BlosumEncoder();
+//		NineBitEncoder encode = new NineBitEncoder();
+		
 //		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", true, encode);
 		Instances data = parser.EncodeParser.readTrainingAndEncode("project_training.txt", true, encode);
 		data.setClassIndex(data.numAttributes()-1);
