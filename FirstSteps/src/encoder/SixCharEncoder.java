@@ -6,7 +6,11 @@ package encoder;
 public class SixCharEncoder extends Encoder {
 
 
-
+	/**
+	 * Encodes each amino acid as 6Char array. The 'a' in the original encoding was replaced by '10' here.
+	* @param Current amino acid that needs to be encoded
+	 * @return Encoding as int[]
+	 */
 	public int[] encodeSingle(AminoAcid aa) {
 
 		int[] attValues = new int[6];

@@ -11,7 +11,7 @@ import parser.EncodeParser;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 
-//TODO: generate all the different ANNs and store them
+//TODO generate best ANN and store them
 public class NeuralNetwork implements EncodeParser{
 
 	private MultilayerPerceptron ann;
@@ -29,7 +29,7 @@ public class NeuralNetwork implements EncodeParser{
 	 * your data with a given model are then provided.
 	 * 
 	 * @param filename
-	 *            Proper filename such as 9bitIC50 etc
+	 *            Proper filename such as 9BitIC50 etc
 	 * @throws Exception
 	 *             something went wrong with reading in the file
 	 */
@@ -50,7 +50,7 @@ public class NeuralNetwork implements EncodeParser{
 			try {
 				label = ann.classifyInstance(testdata.instance(i));
 				output.instance(i).setClassValue(label);
-			} catch (Exception e) { // TODO Auto-generated catch block
+			} catch (Exception e) { 
 				e.printStackTrace();
 			}
 			
@@ -63,10 +63,11 @@ public class NeuralNetwork implements EncodeParser{
 	
 	/**
 	 * SHOULD NOT BE USED, UNLESS NEW ANNs ARE GENERATED
+	 * Method generates new ANNs and store them in the modelANN file for later use. All parameters are already set
 	 * @param trainingsdata
 	 * @param filename
 	 */
-	private void generateANN(Instances trainingsdata, String filename) {
+	private void generateANN(Instances trainingsdata, String outputfilename) {
 
 		MultilayerPerceptron ann = new MultilayerPerceptron();
 		ann.setLearningRate(0.1);
@@ -86,7 +87,7 @@ public class NeuralNetwork implements EncodeParser{
 		}
 
 		try {
-			weka.core.SerializationHelper.write(filename, ann);
+			weka.core.SerializationHelper.write(outputfilename, ann);
 		} catch (Exception e) {
 			System.err.println("Classifier couldn't be stored");
 			e.printStackTrace();

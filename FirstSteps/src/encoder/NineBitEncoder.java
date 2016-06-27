@@ -7,9 +7,9 @@ public class NineBitEncoder extends Encoder {
 
 
 	/**
-	 * Source: https://books.google.de/books?id=JbBsPibqtIsC&pg=PA27&lpg=PA27&dq=amino+acid+representation+in+ann&source=bl&ots=IedGSv-5bk&sig=jCBvzz8RBdBBdWNNImoGKwDR3uw&hl=en&sa=X&ved=0ahUKEwjh7cPj25XNAhUFnRoKHWW3APUQ6AEIHDAA#v=onepage&q&f=false
+	 *Encodes each amino acid as a 9Bit array. Source: see paper
 	 * @param Current amino acid that needs to be encoded
-	 * @return Encoding as instance
+	 * @return Encoding as int[]
 	 */
 	@Override
 	public int[] encodeSingle(AminoAcid aa) {

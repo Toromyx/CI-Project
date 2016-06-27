@@ -26,8 +26,8 @@ public class UserInputProcessor implements EncodeParser {
 	private Instances predictData;
 
 	/**
-	 * 
-	 * @param inputArgs 
+	 * An instance takes all args of the userinput as fields
+	 * @param inputFilename, encoding(one of: "6Char","9Bit" or "blosumX"), annType (one of: "IC50" or "Binary"), outputFilename
 	 */
 	public UserInputProcessor(String inputFilename, String encoding, String annType, String outputFilename) {
 		this.inputFilename = inputFilename;
@@ -37,7 +37,7 @@ public class UserInputProcessor implements EncodeParser {
 	}
 
 	/**
-	 * Initializes Encoder according to provided encoding type 6Char, 9Bit, blosumX
+	 * Initializes Encoder according to provided encoding type in UserInput
 	 */
 	private void initializeEncoder() {
 		if (encoding.equals("6Char")) {
@@ -92,9 +92,6 @@ public class UserInputProcessor implements EncodeParser {
 	/**
 	 * According to the encoding and the ann name the method returns the
 	 * filename of the ANN that should be used
-	 * 
-	 * @param encoding
-	 * @param annName
 	 * @return
 	 */
 	private String chooseANN() {
@@ -202,24 +199,23 @@ public class UserInputProcessor implements EncodeParser {
 				return "blosum100Binary";
 			}
 		}
-
 		return null;
 	}
 
 	/**
-	 * 
+	 * Applys the data provided by user to a given ANN specified by type
 	 * @param chosenAnn
 	 * @return data as predicted by the ANN
 	 * @throws Exception
 	 */
 	private Instances applyANN(String chosenAnn) throws Exception {
 		String annName = "ModelANNs/" + chosenAnn;
-		System.out.println(annName);
 		NeuralNetwork ann = new NeuralNetwork(annName);
 		return ann.classifyData(predictData);
 	}
 	
 	/**
+	 * Writes the predicted data to an outputfile
 	 * @param output
 	 * @throws IOException
 	 */
@@ -228,7 +224,7 @@ public class UserInputProcessor implements EncodeParser {
 	}
 	
 	/**
-	 * Runs class, should be called to execute all methods.
+	 * Runs class, should be called to execute all methods: initializesEncoder, initializes data, applies the ann and stores the output
 	 * @throws Exception
 	 */
 	public void run() throws Exception{
