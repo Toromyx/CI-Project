@@ -200,37 +200,56 @@ public class Validation {
 		
 		ArrayList<Prediction> a = eval.predictions();
 		
-		int[] conf ={0,0,0,0};// new int[4];
+		int tp = 0;
+		int tn = 0;
+		int fn = 0;
+		int fp = 0;
 		ArrayList<Double> threshold = gettreshoholds(eval);
 		
-		int[] falsePositiveRate = new int[threshold.size()];
-		int[] truePositiveRate = new int[threshold.size()];
+		double[] falsePositiveRate = new double[threshold.size()];
+		double[] truePositiveRate = new double[threshold.size()];
 		
 		for(int j=0; j<threshold.size(); j++){
 			for (int i = 0; i < a.size(); i++) {
+//				System.out.println("actual: "+a.get(i).actual());
+//				System.out.println("predicted: "+a.get(i).predicted());
+				//System.out.println("weight: "+a.get(i).weight());
 			
-			System.out.println("actual: "+a.get(i).actual());
-			System.out.println("predicted: "+a.get(i).predicted());
-			System.out.println("weight: "+a.get(i).weight());
-			
-			if(a.get(i).actual()>=threshold.get(j) && a.get(i).predicted()>=threshold.get(j))
-				conf[0]++;
-			if(a.get(i).actual()<threshold.get(j) && a.get(i).predicted()<threshold.get(j))
-				conf[1]++;
-			if(a.get(i).actual()>=threshold.get(j) && a.get(i).predicted()<threshold.get(j))
-				conf[2]++;
-			if(a.get(i).actual()<threshold.get(j) && a.get(i).predicted()>=threshold.get(j))
-				conf[3]++;
+				if(a.get(i).actual()>=threshold.get(j) && a.get(i).predicted()>=threshold.get(j))
+					tp++;
+				if(a.get(i).actual()<threshold.get(j) && a.get(i).predicted()<threshold.get(j))
+					tn++;
+				if(a.get(i).actual()>=threshold.get(j) && a.get(i).predicted()<threshold.get(j))
+					fn++;
+				if(a.get(i).actual()<threshold.get(j) && a.get(i).predicted()>=threshold.get(j))
+					fp++;
 			}
-			falsePositiveRate[j] = (int) conf[3]/(conf[1]+conf[3]);
-			truePositiveRate[j] = (int) conf[0]/(conf[0]+conf[2]);
+//			System.out.println("tp: "+tp);
+//			System.out.println("tn: "+tn);
+//			System.out.println("fp: "+fp);
+//			System.out.println("fn: "+fn);
+			if((tn+fp)>0) falsePositiveRate[j] = (double)fp/(tn+fp);
+			else falsePositiveRate[j] = 0;
 			
+			if((tp+fn)>0) truePositiveRate[j] = (double)tp/(tp+fn);
+			else truePositiveRate[j]=0;
+			
+			tp=0; tn=0;
+			fp=0; fn=0;
 		}
 		
-		System.out.println("tp: "+conf[0]);
-		System.out.println("tn: "+conf[1]);
-		System.out.println("fn: "+conf[2]);
-		System.out.println("fp: "+conf[3]);
+		//print
+		System.out.println("coordinates of all the poits of the ROC-curve: ");
+		System.out.println("falsePositiveRate");
+		for(int i = 0; i<falsePositiveRate.length; i++){
+			System.out.print(" "+falsePositiveRate[i]+" , ");
+		}
+		System.out.println();
+		System.out.println("truePositiveRate");
+		for(int i = 0; i<truePositiveRate.length; i++){
+			System.out.print(" "+truePositiveRate[i]+" , ");
+		}
+		System.out.println();
 			
 	}
 	
@@ -264,12 +283,12 @@ public class Validation {
 //		NineBitEncoder encode = new NineBitEncoder();
 		
 		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", false, encode);
-//		Instances data = parser.EncodeParser.readTrainingAndEncode("project_training.txt", true, encode);
+//		Instances data = parser.EncodeParser.readTrainingAndEncode("project_training.txt", false, encode);
 		data.setClassIndex(data.numAttributes()-1);
 		
 		//do the Validation
 		Validation val = new Validation(data, encode);
-		val.CrossValidateNumeric(10, 0.9, 0.05, 100, "5");
+		val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "5");
 //		val.CrossValidateNominal(10, 0.9, 0.05, 100, "5");
 	}
 
