@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
+
 import encoder.BlosumEncoder;
 import encoder.BlosumEncoder.BlosumNum;
 import parser.EncodeParser;
 import encoder.BlosumInterface;
 import encoder.Encoder;
-import encoder.NineBitEncoder;
 import encoder.SixCharEncoder;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.Prediction;
@@ -314,11 +314,9 @@ public class Validation {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		
 		// choose encoder 
 		SixCharEncoder encode = new SixCharEncoder();
 //		NineBitEncoder encode = new NineBitEncoder();
-		
 		// for binary prediction
 		Instances data1 = parser.EncodeParser.readTrainingAndEncode("project_training.txt", true, encode);
 		data1.setClassIndex(data1.numAttributes()-1);
