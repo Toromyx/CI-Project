@@ -209,8 +209,9 @@ public class UserInputProcessor implements EncodeParser {
 	 * @throws Exception
 	 */
 	private Instances applyANN(String chosenAnn) throws Exception {
-		String annName = "ModelANNs/" + chosenAnn;
-		NeuralNetwork ann = new NeuralNetwork(annName);
+		//String annName = "ModelANNs/" + chosenAnn;
+		//NeuralNetwork ann = new NeuralNetwork(annName);
+		NeuralNetwork ann = new NeuralNetwork(chosenAnn);
 		return ann.classifyData(predictData);
 	}
 	

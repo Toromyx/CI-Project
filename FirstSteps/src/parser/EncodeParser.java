@@ -105,7 +105,7 @@ public interface EncodeParser {
 		
 		Instances mergedInst = new Instances(inputInst, 0, inputInst.size());
 		for(int currInst=0; currInst<mergedInst.size(); currInst++) {
-			mergedInst.instance(currInst).setClassValue(output.instance(currInst).classValue());
+			mergedInst.instance(currInst).setClassValue(output.instance(currInst).classValue()>0.5?1:0);
 		}
 		
 		saver.setInstances(mergedInst);
