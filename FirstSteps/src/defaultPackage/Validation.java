@@ -7,8 +7,11 @@ package defaultPackage;
  */
 
 import java.awt.BorderLayout;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 import encoder.BlosumEncoder;
@@ -29,7 +32,7 @@ import weka.gui.visualize.PlotData2D;
 import weka.gui.visualize.ThresholdVisualizePanel;
 
 /**
- * Class for Cross-Validation and Evaluation of the given ANN
+ * Class for Cross-Validation and Evaluation of the given ANN and encoding
  *  
  */
 
@@ -58,8 +61,9 @@ public class Validation {
 	}
 	
 	/**
-	 * Cross-Validation of the ANN with given network parameters and the encoded data set.
-	 * The attributes of the data set are real numbers, so their type in Weka is NUMERIC. 
+	 * Cross-Validation of the ANN with given backpropagation parameters for network generation and the encoded data set.
+	 * The attributes of the validated data set are real numbers, so their type in Weka is NUMERIC. 
+	 * The function is used for IC50 based prediction. 
 	 * 
 	 * @param foldsNumber
 	 * @param momentum
@@ -88,13 +92,14 @@ public class Validation {
 		System.out.println("For numeric Attributes: ");
 		printResults(CV, foldsNumber);
 		
-		printROCforIC50(CV);
+		calculateROCvaluesForIC50(CV);
 	}
 	
 	/**
-	 * Cross-Validation of the ANN with given network parameters and the encoded data set.
+	 * Cross-Validation of the ANN with given backpropagation parameters for network generation and the encoded data set.
 	 * The type of attributes in the encoded data set is changed to NOMINAL using Weka filter NumericToNominal. 
-	 * Nominal attributes allow creating of ROC-curves and confusion matrixes. 
+	 * Validation with nominal attributes allows creating of ROC-curves and confusion matrixes. 
+	 * The function is used for binary prediction.
 	 * 
 	 * @param foldsNumber
 	 * @param momentum
@@ -132,7 +137,7 @@ public class Validation {
 	}
 	
 	/**
-	 * Help function for printing the cross validation results for given network parameters.
+	 * Help function for printing the cross validation results and given network parameters.
 	 * 
 	 * @param eval Cross-Validation of the encoded data and given ANN
 	 * @throws Exception 
@@ -169,10 +174,10 @@ public class Validation {
 	    System.out.println("Area under the ROC-Curve: "+ThresholdCurve.getROCArea(result));
 	    
 	    // plot curve
-	    ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
+	    ThresholdVisualizePanel tvp = new ThresholdVisualizePanel();
 	    DecimalFormat df = new DecimalFormat("#0.000");
-	    vmc.setROCString("(Area under ROC = " + df.format(ThresholdCurve.getROCArea(result))+")");
-	    vmc.setName(result.relationName());
+	    tvp.setROCString("(Area under ROC = " + df.format(ThresholdCurve.getROCArea(result))+")");
+	    tvp.setName(result.relationName());
 	    
 	    PlotData2D tempd = new PlotData2D(result);
 	    tempd.setPlotName(result.relationName());
@@ -182,15 +187,15 @@ public class Validation {
 	    for (int n = 1; n < cp.length; n++)
 	    	cp[n] = true;
 	    tempd.setConnectPoints(cp);
-	    vmc.addPlot(tempd);
+	    tvp.addPlot(tempd);
 	 
 	    // display curve
-	    String plotName = vmc.getName();
+	    String plotName = tvp.getName();
 	    final javax.swing.JFrame jf =
 	      new javax.swing.JFrame("Weka Classifier Visualize: "+plotName);
 	    jf.setSize(600,500);
 	    jf.getContentPane().setLayout(new BorderLayout());
-	    jf.getContentPane().add(vmc, BorderLayout.CENTER);
+	    jf.getContentPane().add(tvp, BorderLayout.CENTER);
 	    jf.addWindowListener(new java.awt.event.WindowAdapter() {
 	    	public void windowClosing(java.awt.event.WindowEvent e) {
 	    		jf.dispose();
@@ -199,108 +204,143 @@ public class Validation {
 	    jf.setVisible(true);
 	}
 	
-	private void printROCforIC50(Evaluation eval) throws Exception{
+	/**
+	 * The function calculates false positive rate and true positive rate for every threshold value 
+	 * for generating of the ROC curve.
+	 * 
+	 * @param eval
+	 * @throws Exception
+	 */
+	
+	private void calculateROCvaluesForIC50(Evaluation eval) throws Exception{
 		
-		ArrayList<Prediction> a = eval.predictions();
+		ArrayList<Prediction> predictions = eval.predictions();
+		ArrayList<Double> threshold = getThresholds(eval);
 		
-		int tp = 0;
-		int tn = 0;
-		int fn = 0;
-		int fp = 0;
-		ArrayList<Double> threshold = gettreshoholds(eval);
+		int tp = 0; // true positive
+		int tn = 0; // true negative
+		int fn = 0; // false negative
+		int fp = 0; // false positive
 		
 		double[] falsePositiveRate = new double[threshold.size()];
 		double[] truePositiveRate = new double[threshold.size()];
 		
 		for(int j=0; j<threshold.size(); j++){
-			for (int i = 0; i < a.size(); i++) {
-//				System.out.println("actual: "+a.get(i).actual());
-//				System.out.println("predicted: "+a.get(i).predicted());
-				//System.out.println("weight: "+a.get(i).weight());
+			for (int i = 0; i < predictions.size(); i++) {
 			
-				if(a.get(i).actual()>=threshold.get(j) && a.get(i).predicted()>=threshold.get(j))
+				if(predictions.get(i).actual()<threshold.get(j) && predictions.get(i).predicted()<threshold.get(j))
 					tp++;
-				if(a.get(i).actual()<threshold.get(j) && a.get(i).predicted()<threshold.get(j))
+				if(predictions.get(i).actual()>=threshold.get(j) && predictions.get(i).predicted()>=threshold.get(j))
 					tn++;
-				if(a.get(i).actual()>=threshold.get(j) && a.get(i).predicted()<threshold.get(j))
+				if(predictions.get(i).actual()<threshold.get(j) && predictions.get(i).predicted()>=threshold.get(j))
 					fn++;
-				if(a.get(i).actual()<threshold.get(j) && a.get(i).predicted()>=threshold.get(j))
+				if(predictions.get(i).actual()>=threshold.get(j) && predictions.get(i).predicted()<threshold.get(j))
 					fp++;
 			}
-//			System.out.println("tp: "+tp);
-//			System.out.println("tn: "+tn);
-//			System.out.println("fp: "+fp);
-//			System.out.println("fn: "+fn);
-			if((tn+fp)>0) falsePositiveRate[j] = (double)fp/(tn+fp);
-			else falsePositiveRate[j] = 0;
 			
-			if((tp+fn)>0) truePositiveRate[j] = (double)tp/(tp+fn);
-			else truePositiveRate[j]=0;
+			// to avoid devision by zero 
+			if((tn+fp)==0 || (tp+fn)==0 ){
+				falsePositiveRate[j] = 0;
+				truePositiveRate[j] = 0;
+			}else{
+				falsePositiveRate[j] = (double)fp/(tn+fp);
+				truePositiveRate[j] = (double)tp/(tp+fn);
+			}
 			
+			// reset for the next threshold
 			tp=0; tn=0;
 			fp=0; fn=0;
 		}
 		
-		//print
+		// print the results
 		System.out.println("coordinates of all the poits of the ROC-curve: ");
+		String s;	// for output format
+				
 		System.out.println("falsePositiveRate");
 		for(int i = 0; i<falsePositiveRate.length; i++){
-			System.out.print(" "+falsePositiveRate[i]+" , ");
+			s = String.format(Locale.US, "%.3f", falsePositiveRate[i]);
+			System.out.print(" "+s+" , ");
 		}
 		System.out.println();
+		
 		System.out.println("truePositiveRate");
 		for(int i = 0; i<truePositiveRate.length; i++){
-			System.out.print(" "+truePositiveRate[i]+" , ");
+			s = String.format(Locale.US, "%.3f", truePositiveRate[i]);
+			System.out.print(" "+s+" , ");
 		}
 		System.out.println();
-			
+		
 	}
+
+	/**
+	 * Creating a list of all possible thresholds for a given evaluation.
+	 * The thresholds are all possible IC50 values. 
+	 * 
+	 * @param eval
+	 * @return
+	 */
 	
-	private ArrayList<Double> gettreshoholds(Evaluation eval){
-		ArrayList<Prediction> a = eval.predictions();
+	private ArrayList<Double> getThresholds(Evaluation eval){
+		
+		ArrayList<Prediction> predictions = eval.predictions();
 		ArrayList<Double> list = new ArrayList<Double>();
 		
-		for (Prediction temp : a) {
-			if (!inthelist(temp.actual(), list)) list.add(temp.actual());
+		for (Prediction i : predictions) {
+			if (!inthelist(i.actual(), list)) list.add(i.actual());
+			if (!inthelist(i.predicted(), list)) list.add(i.predicted());
 		}
 		
 		return list;
 	}
 	
-	private boolean inthelist(double i, ArrayList<Double> list){
-		for (double temp : list) {
-			if (i ==temp) return true;
+	/**
+	 * The function checks if the number x presents in the list   
+	 * 
+	 * @param x double number 
+	 * @param list ArrayList of Doubles
+	 * @return
+	 */
+	
+	private boolean inthelist(double x, ArrayList<Double> list){
+		for (double i : list) {
+			if (x == i) return true;
 		}
 		return false;
 	}
 	
 	/**
-	 * for Testing
+	 * for testing of the validation functions 
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
 		
-//		SixCharEncoder encode = new SixCharEncoder();
-//		BlosumEncoder encode = new BlosumEncoder();
+		// choose encoder 
+		SixCharEncoder encode = new SixCharEncoder();
 //		NineBitEncoder encode = new NineBitEncoder();
-//		
-//		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", false, encode);
-//		Instances data = parser.EncodeParser.readTrainingAndEncode("project_training.txt", false, encode);
-//		data.setClassIndex(data.numAttributes()-1);
-//		
-//		//do the Validation
-//		Validation val = new Validation(data, encode);
-//		val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "5");
-//		val.CrossValidateNominal(10, 0.9, 0.05, 100, "5");
 		
+		// for binary prediction
+		Instances data1 = parser.EncodeParser.readTrainingAndEncode("project_training.txt", true, encode);
+		data1.setClassIndex(data1.numAttributes()-1);
+		
+		Validation val1 = new Validation(data1, encode);
+		val1.CrossValidateNominal(10, 0.9, 0.05, 1000, "5");
+		
+		// for IC50 prediction
+		Instances data2 = parser.EncodeParser.readTrainingAndEncode("project_training.txt", false, encode);
+		data2.setClassIndex(data2.numAttributes()-1);
+		
+		Validation val2 = new Validation(data2, encode);
+		val2.CrossValidateNumeric(10, 0.9, 0.05, 1000, "5");
+		
+		// validation for every BLOSUM matrix
 		for (int bNum=BlosumEncoder.blosumNums.length-1; bNum>=0; bNum--) {
 			System.out.println("Validating Blosum"+BlosumEncoder.blosumNums[bNum]+" encoding.");
-			BlosumEncoder encode = new BlosumEncoder(BlosumEncoder.blosumNums[bNum]);
-			Instances data = EncodeParser.readTrainingAndEncode("project_training.txt", false, encode);
+			BlosumEncoder encoder = new BlosumEncoder(BlosumEncoder.blosumNums[bNum]);
+			Instances data = EncodeParser.readTrainingAndEncode("project_training.txt", false, encoder);
 			data.setClassIndex(data.numAttributes()-1);
-			Validation val = new Validation(data, encode);
-			val.CrossValidateNominal(10, 0.9, 0.05, 1000, "20");
+			Validation val = new Validation(data, encoder);
+			val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "20");
 		}
 	}
 
