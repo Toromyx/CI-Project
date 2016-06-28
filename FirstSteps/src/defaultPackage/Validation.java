@@ -7,6 +7,8 @@ package defaultPackage;
  */
 
 import java.awt.BorderLayout;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
