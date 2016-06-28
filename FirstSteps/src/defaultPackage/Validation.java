@@ -10,8 +10,8 @@ import java.awt.BorderLayout;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+import encoder.BlosumEncoder;
 import encoder.Encoder;
-import encoder.NineBitEncoder;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.functions.MultilayerPerceptron;
@@ -221,8 +221,8 @@ public class Validation {
 	public static void main(String[] args) throws Exception {
 
 		//SixCharEncoder encode = new SixCharEncoder();
-		 //BlosumEncoder encode = new BlosumEncoder(30);
-		NineBitEncoder encode = new NineBitEncoder();
+		 BlosumEncoder encode = new BlosumEncoder(60);
+		//NineBitEncoder encode = new NineBitEncoder();
 
 		//Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", true, encode);
 		 Instances data =
@@ -233,7 +233,7 @@ public class Validation {
 		// do the Validation
 		Validation val = new Validation(data, encode);
 		// val.CrossValidateNumeric(10, 0.9, 0.05, 100, "5");
-		val.CrossValidateNominal(10, 0.9, 0.05, 1000, "9");
+		val.CrossValidateNominal(10, 0.9, 0.05, 1000, "20");
 	}
 
 }
