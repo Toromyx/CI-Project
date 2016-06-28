@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import encoder.BlosumEncoder;
+import encoder.BlosumEncoder.BlosumNum;
+import parser.EncodeParser;
+import encoder.BlosumInterface;
 import encoder.Encoder;
 import encoder.NineBitEncoder;
 import encoder.SixCharEncoder;
@@ -278,18 +281,27 @@ public class Validation {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		SixCharEncoder encode = new SixCharEncoder();
+//		SixCharEncoder encode = new SixCharEncoder();
 //		BlosumEncoder encode = new BlosumEncoder();
 //		NineBitEncoder encode = new NineBitEncoder();
-		
-		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", false, encode);
+//		
+//		Instances data = parser.EncodeParser.readTrainingAndEncode("train_mini.txt", false, encode);
 //		Instances data = parser.EncodeParser.readTrainingAndEncode("project_training.txt", false, encode);
-		data.setClassIndex(data.numAttributes()-1);
-		
-		//do the Validation
-		Validation val = new Validation(data, encode);
-		val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "5");
+//		data.setClassIndex(data.numAttributes()-1);
+//		
+//		//do the Validation
+//		Validation val = new Validation(data, encode);
+//		val.CrossValidateNumeric(10, 0.9, 0.05, 1000, "5");
 //		val.CrossValidateNominal(10, 0.9, 0.05, 100, "5");
+		
+		for (int bNum=BlosumEncoder.blosumNums.length-1; bNum>=0; bNum--) {
+			System.out.println("Validating Blosum"+BlosumEncoder.blosumNums[bNum]+" encoding.");
+			BlosumEncoder encode = new BlosumEncoder(BlosumEncoder.blosumNums[bNum]);
+			Instances data = EncodeParser.readTrainingAndEncode("project_training.txt", false, encode);
+			data.setClassIndex(data.numAttributes()-1);
+			Validation val = new Validation(data, encode);
+			val.CrossValidateNominal(10, 0.9, 0.05, 1000, "20");
+		}
 	}
 
 }
