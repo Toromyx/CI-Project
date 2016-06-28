@@ -7,9 +7,9 @@ import weka.core.Instances;
 
 public class BlosumEncoder extends Encoder implements BlosumInterface{
 
-	protected static enum BlosumNum{b30, b35, b40, b45, b50, b55, b60, b62, b65, b70, b75, b80, b85, b90, b100}
-	protected static int[] blosumNums = {30, 35, 40, 45, 50, 55, 60, 62, 65, 70, 75, 80, 85, 90, 100};
-	protected static boolean[] blosumExists = new boolean[101];
+	public static enum BlosumNum{b30, b35, b40, b45, b50, b55, b60, b62, b65, b70, b75, b80, b85, b90, b100}
+	public static int[] blosumNums = {30, 35, 40, 45, 50, 55, 60, 62, 65, 70, 75, 80, 85, 90, 100};
+	public static boolean[] blosumExists = new boolean[101];
 
 	{
 		for (int i=0; i<blosumNums.length; i++){
