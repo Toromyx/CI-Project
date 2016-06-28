@@ -297,7 +297,7 @@ public class Validation {
 		for (int bNum=BlosumEncoder.blosumNums.length-1; bNum>=0; bNum--) {
 			System.out.println("Validating Blosum"+BlosumEncoder.blosumNums[bNum]+" encoding.");
 			BlosumEncoder encode = new BlosumEncoder(BlosumEncoder.blosumNums[bNum]);
-			Instances data = EncodeParser.readTrainingAndEncode("project_training.txt", false, encode);
+			Instances data = EncodeParser.readTrainingAndEncode("project_training.txt", true, encode);
 			data.setClassIndex(data.numAttributes()-1);
 			Validation val = new Validation(data, encode);
 			val.CrossValidateNominal(10, 0.9, 0.05, 1000, "20");
