@@ -7,7 +7,7 @@ import java.io.IOException;
   * @author Friederike
   *
   *Class runs the program. Userinput needs to be read in via console in the following order:
-  * DATAFILENAME ENCODING ANN OUTPUTFILENAME
+  * DATAFILENAME OUTPUTFILENAME
   * 
   * Else a help() function is displayed
   */
